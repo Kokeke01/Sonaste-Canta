@@ -64,34 +64,10 @@
             user-select: none;
         }
         @keyframes caerNota {
-            0% {
-                transform: translateY(-100px) rotate(0deg);
-                opacity: 0;
-            }
-            10% {
-                opacity: 0.2;
-            }
-            90% {
-                opacity: 0.2;
-            }
-            100% {
-                transform: translateY(110vh) rotate(360deg);
-                opacity: 0;
-            }
-        }
-
-        /* Onda expansiva de fondo */
-        .onda-fondo {
-            position: fixed;
-            border-radius: 50%;
-            background: radial-gradient(circle, rgba(108,60,225,0.08), transparent 70%);
-            pointer-events: none;
-            z-index: 0;
-            animation: ondaExpandir 6s ease-out infinite;
-        }
-        @keyframes ondaExpandir {
-            0% { transform: scale(0); opacity: 1; }
-            100% { transform: scale(1); opacity: 0; }
+            0% { transform: translateY(-100px) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.2; }
+            90% { opacity: 0.2; }
+            100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
         }
 
         /* ============================================
@@ -133,7 +109,7 @@
             font-weight: 800;
             font-size: clamp(12px, 1.5vw, 18px);
             position: relative;
-            z-index: 1;
+            z-index: 10;
         }
         @keyframes gradienteBanner {
             0%, 100% { background-position: 0% 50%; }
@@ -157,7 +133,7 @@
             background: linear-gradient(135deg, #1A1A2E, #0f0f1a, #1a0a2e);
             background-size: 200% 200%;
             animation: fondoGradiente 10s ease infinite;
-            padding: 45px 20px 35px;
+            padding: 35px 20px 25px;
             text-align: center;
             border-bottom: 4px solid var(--primary);
             position: relative;
@@ -184,9 +160,9 @@
         }
 
         .instrumentos {
-            font-size: clamp(24px, 4vw, 40px);
-            margin-bottom: 12px;
-            letter-spacing: 15px;
+            font-size: clamp(20px, 3.5vw, 34px);
+            margin-bottom: 10px;
+            letter-spacing: 12px;
             position: relative;
             z-index: 2;
         }
@@ -205,7 +181,7 @@
         }
 
         .header-canta h1 {
-            font-size: clamp(2rem, 6vw, 4.5rem);
+            font-size: clamp(1.8rem, 5.5vw, 4rem);
             font-weight: 900;
             text-transform: uppercase;
             margin: 0;
@@ -232,12 +208,12 @@
 
         .header-canta .subtitulo {
             color: #bbb;
-            font-size: clamp(13px, 1.5vw, 16px);
-            margin-top: 14px;
+            font-size: clamp(12px, 1.4vw, 15px);
+            margin-top: 12px;
             font-weight: 500;
             position: relative;
             z-index: 2;
-            min-height: 24px;
+            min-height: 22px;
         }
         .subtitulo-cursor {
             display: inline-block;
@@ -253,6 +229,110 @@
             50% { opacity: 0; }
         }
 
+        /* ============================================
+           🔢 INDICADOR DE PASOS (STEPPER)
+           ============================================ */
+        .stepper {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            background: linear-gradient(135deg, #1A1A2E, #0f0f1a);
+            border-bottom: 2px solid var(--primary);
+            padding: 14px 15px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+            backdrop-filter: blur(10px);
+        }
+        .stepper-inner {
+            max-width: 700px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+        }
+        .step {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex: 1;
+            min-width: 0;
+            position: relative;
+            transition: var(--transition);
+            opacity: 0.5;
+        }
+        .step.activo {
+            opacity: 1;
+        }
+        .step.completado {
+            opacity: 1;
+        }
+        .step-numero {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            font-size: 15px;
+            flex-shrink: 0;
+            background: #2a2a3e;
+            border: 2px solid #4a4a5e;
+            color: #666;
+            transition: var(--transition);
+        }
+        .step.activo .step-numero {
+            background: linear-gradient(135deg, #6C3CE1, #4A1F9E);
+            border-color: var(--gold);
+            color: white;
+            box-shadow: 0 0 0 0 rgba(108, 60, 225, 0.7);
+            animation: pulseStepper 1.5s ease-in-out infinite;
+        }
+        @keyframes pulseStepper {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(108, 60, 225, 0.7); }
+            50% { box-shadow: 0 0 0 8px rgba(108, 60, 225, 0); }
+        }
+        .step.completado .step-numero {
+            background: linear-gradient(135deg, #4CAF50, #2E7D32);
+            border-color: #4CAF50;
+            color: white;
+        }
+        .step-texto {
+            font-size: 12px;
+            font-weight: 700;
+            color: #888;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            transition: var(--transition);
+        }
+        .step.activo .step-texto {
+            color: var(--gold);
+        }
+        .step.completado .step-texto {
+            color: #4CAF50;
+        }
+        .step-flecha {
+            color: #4a4a5e;
+            font-size: 16px;
+            flex-shrink: 0;
+            transition: var(--transition);
+        }
+        .step-flecha.activa {
+            color: var(--primary);
+        }
+
+        @media (max-width: 550px) {
+            .step-texto {
+                display: none;
+            }
+            .step-numero {
+                width: 30px;
+                height: 30px;
+                font-size: 13px;
+            }
+        }
+
         /* CONTENEDOR */
         .contenedor {
             max-width: 1100px;
@@ -262,6 +342,43 @@
             width: 100%;
             position: relative;
             z-index: 1;
+        }
+
+        /* PASO CONTENEDOR */
+        .paso {
+            margin-bottom: 25px;
+            transition: var(--transition);
+            position: relative;
+        }
+        .paso-titulo {
+            text-align: center;
+            color: var(--gold);
+            font-size: clamp(18px, 2.5vw, 24px);
+            font-weight: 800;
+            margin: 0 0 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        .paso-titulo .num {
+            display: inline-flex;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #6C3CE1, #4A1F9E);
+            color: white;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            font-weight: 900;
+            box-shadow: 0 4px 15px rgba(108, 60, 225, 0.4);
+        }
+        .paso-subtitulo {
+            text-align: center;
+            color: #999;
+            font-size: 13px;
+            margin-bottom: 18px;
         }
 
         /* AVISO LEGAL */
@@ -297,47 +414,12 @@
         }
         .aviso-legal li { margin-bottom: 4px; }
 
-        /* SECCIÓN TÍTULOS */
-        .seccion-titulo {
-            text-align: center;
-            color: var(--gold);
-            font-size: clamp(20px, 3vw, 26px);
-            font-weight: 800;
-            margin: 30px 0 10px;
-            position: relative;
-            display: inline-block;
-            left: 50%;
-            transform: translateX(-50%);
-            padding: 0 20px;
-        }
-        .seccion-titulo::after {
-            content: '';
-            position: absolute;
-            bottom: -5px;
-            left: 0;
-            width: 100%;
-            height: 3px;
-            background: linear-gradient(90deg, transparent, var(--gold), transparent);
-            animation: lineaBrillo 2s ease-in-out infinite;
-        }
-        @keyframes lineaBrillo {
-            0%, 100% { opacity: 0.4; transform: scaleX(0.7); }
-            50% { opacity: 1; transform: scaleX(1); }
-        }
-
-        .seccion-subtitulo {
-            text-align: center;
-            color: #999;
-            font-size: 14px;
-            margin-bottom: 20px;
-        }
-
         /* GALERÍA */
         .cantantes-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
             gap: 14px;
-            margin: 20px 0;
+            margin: 0;
         }
         .cantante-card {
             background: linear-gradient(135deg, #2a2a3e, #1a1a2e);
@@ -352,14 +434,8 @@
             animation: aparecerTarjeta 0.6s ease backwards;
         }
         @keyframes aparecerTarjeta {
-            from {
-                opacity: 0;
-                transform: translateY(30px) scale(0.8);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0) scale(1);
-            }
+            from { opacity: 0; transform: translateY(30px) scale(0.8); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
         }
         .cantante-card::before {
             content: '🎵';
@@ -403,7 +479,6 @@
             color: white;
             border: 3px solid var(--primary);
             transition: var(--transition);
-            position: relative;
         }
         .cantante-card.seleccionado .avatar {
             animation: latidoAvatar 1s ease-in-out infinite;
@@ -453,7 +528,6 @@
 
         /* FORMULARIO */
         .canta-form {
-            margin-top: 30px;
             background: linear-gradient(135deg, #1A1A2E, #0f0f1a);
             padding: 25px;
             border-radius: 16px;
@@ -476,7 +550,7 @@
             display: block;
             color: var(--gold);
             font-weight: 800;
-            font-size: 17px;
+            font-size: 15px;
             margin-bottom: 10px;
         }
         .canta-form textarea {
@@ -534,16 +608,17 @@
             margin-top: 20px;
         }
         .canta-botones button {
-            padding: 15px 40px;
+            padding: 18px 45px;
             border-radius: 50px;
-            font-weight: 800;
-            font-size: 16px;
+            font-weight: 900;
+            font-size: 17px;
             cursor: pointer;
             transition: var(--transition);
             border: 0;
-            min-width: 200px;
+            min-width: 240px;
             position: relative;
             overflow: hidden;
+            letter-spacing: 0.5px;
         }
         .btn-canta-generar {
             background: linear-gradient(135deg, #6C3CE1, #4A1F9E);
@@ -677,14 +752,8 @@
             animation: caerConfeti 3s ease-in forwards;
         }
         @keyframes caerConfeti {
-            0% {
-                transform: translateY(0) rotate(0deg);
-                opacity: 1;
-            }
-            100% {
-                transform: translateY(100vh) rotate(720deg);
-                opacity: 0;
-            }
+            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
         }
 
         /* TOAST */
@@ -782,7 +851,7 @@
             .cantante-card .nombre { font-size: 11px; }
             .canta-botones button { min-width: 100%; }
             .toast-container { max-width: 90%; right: 5%; }
-            .instrumentos { letter-spacing: 8px; font-size: 22px; }
+            .instrumentos { letter-spacing: 6px; font-size: 18px; }
         }
 
         ::-webkit-scrollbar { width: 8px; height: 8px; }
@@ -810,34 +879,74 @@
             <span>🎸</span><span>🎹</span><span>🎺</span><span>🥁</span><span>🎻</span>
         </div>
         <h1>🎤 ¡SONASTE CANTA! 🎤</h1>
-        <p class="subtitulo" id="subtitulo">
+        <p class="subtitulo">
             <span id="textoSubtitulo"></span><span class="subtitulo-cursor"></span>
         </p>
     </header>
 
+    <!-- 🔢 INDICADOR DE PASOS -->
+    <div class="stepper" id="stepper">
+        <div class="stepper-inner">
+            <div class="step activo" id="step1">
+                <div class="step-numero">1</div>
+                <div class="step-texto">Elegí un estilo</div>
+            </div>
+            <div class="step-flecha" id="flecha1">→</div>
+            <div class="step" id="step2">
+                <div class="step-numero">2</div>
+                <div class="step-texto">Escribí tu letra</div>
+            </div>
+            <div class="step-flecha" id="flecha2">→</div>
+            <div class="step" id="step3">
+                <div class="step-numero">3</div>
+                <div class="step-texto">Creá tu canción</div>
+            </div>
+        </div>
+    </div>
+
     <main class="contenedor">
 
-        <h2 class="seccion-titulo">🎵 Elegí un estilo musical</h2>
-        <p class="seccion-subtitulo">👆 Clic sobre el estilo para seleccionarlo</p>
+        <!-- PASO 1: ELEGÍ UN ESTILO -->
+        <section class="paso" id="seccionPaso1">
+            <h2 class="paso-titulo">
+                <span class="num">1</span> Elegí un estilo musical
+            </h2>
+            <p class="paso-subtitulo">👆 Clic sobre el estilo para seleccionarlo</p>
+            <div class="cantantes-grid" id="cantantesGrid"></div>
+        </section>
 
-        <div class="cantantes-grid" id="cantantesGrid"></div>
+        <!-- PASO 2: ESCRIBÍ TU LETRA -->
+        <section class="paso" id="seccionPaso2">
+            <h2 class="paso-titulo">
+                <span class="num">2</span> Escribí tu letra
+            </h2>
+            <p class="paso-subtitulo">✍️ Escribí lo que querés que cante el estilo elegido</p>
 
-        <div class="canta-form">
-            <label for="letraCanta">🎵 Escribí tu letra o mensaje:</label>
-            <textarea id="letraCanta" maxlength="500" placeholder="Ej: Argentina, tierra de sol y de esperanza, tu bandera es un pedazo de cielo..."></textarea>
-            <div class="contador"><span id="contadorCanta">0</span> / 500 caracteres</div>
+            <div class="canta-form">
+                <label for="letraCanta">🎵 Tu letra o mensaje:</label>
+                <textarea id="letraCanta" maxlength="500" placeholder="Ej: Argentina, tierra de sol y de esperanza, tu bandera es un pedazo de cielo..."></textarea>
+                <div class="contador"><span id="contadorCanta">0</span> / 500 caracteres</div>
 
-            <div class="consejo">
-                <span class="icono">🔊</span>
-                <div>
-                    <strong>Para una mejor voz:</strong>
-                    <span>Si en tu letra hay un sonido <strong>"LL"</strong>, reemplazalo por <strong>"SH"</strong>.</span>
-                    <div class="ejemplo">📝 Ejemplo: "lluvia" → "shuvia" · "llama" → "shama" · "calle" → "cashe"</div>
+                <div class="consejo">
+                    <span class="icono">🔊</span>
+                    <div>
+                        <strong>Para una mejor voz:</strong>
+                        <span>Si en tu letra hay un sonido <strong>"LL"</strong>, reemplazalo por <strong>"SH"</strong>.</span>
+                        <div class="ejemplo">📝 Ejemplo: "lluvia" → "shuvia" · "llama" → "shama" · "calle" → "cashe"</div>
+                    </div>
                 </div>
             </div>
+        </section>
+
+        <!-- PASO 3: CREÁ TU CANCIÓN -->
+        <section class="paso" id="seccionPaso3">
+            <h2 class="paso-titulo">
+                <span class="num">3</span> Creá tu canción
+            </h2>
+            <p class="paso-subtitulo">🎤 Hacé clic para generar el audio con la voz elegida</p>
 
             <div class="canta-botones">
-                <button class="btn-canta-generar" id="btnCantaGenerar" disabled>🎤 Generar Canción</button>
+                <button class="btn-canta-generar" id="btnCantaGenerar" disabled>🎤 Crear mi canción</button>
                 <button class="btn-canta-descargar" id="btnCantaDescargar" disabled>📥 Descargar</button>
             </div>
 
@@ -847,17 +956,17 @@
                 </div>
                 <div>⏳ Generando canción... 🎶</div>
             </div>
-        </div>
 
-        <div class="canta-resultado" id="cantaResultado">
-            <span class="etiqueta-ia">🤖 Generado con IA</span>
-            <audio id="cantaAudio" controls></audio>
-            <div class="info">
-                ⏱️ Tiempo: <span id="cantaTiempo">0</span>ms | 
-                Tamaño: <span id="cantaTamano">0</span> KB |
-                Estilo: <span id="cantaEstilo">—</span>
+            <div class="canta-resultado" id="cantaResultado">
+                <span class="etiqueta-ia">🤖 Generado con IA</span>
+                <audio id="cantaAudio" controls></audio>
+                <div class="info">
+                    ⏱️ Tiempo: <span id="cantaTiempo">0</span>ms | 
+                    Tamaño: <span id="cantaTamano">0</span> KB |
+                    Estilo: <span id="cantaEstilo">—</span>
+                </div>
             </div>
-        </div>
+        </section>
 
         <!-- AVISO LEGAL AL FINAL -->
         <div class="aviso-legal">
@@ -922,6 +1031,42 @@
         };
 
         // ============================================
+        // 🔢 ACTUALIZAR STEPPER
+        // ============================================
+        function actualizarStepper(pasoActivo) {
+            const step1 = document.getElementById('step1');
+            const step2 = document.getElementById('step2');
+            const step3 = document.getElementById('step3');
+            const flecha1 = document.getElementById('flecha1');
+            const flecha2 = document.getElementById('flecha2');
+
+            [step1, step2, step3].forEach(s => {
+                s.classList.remove('activo', 'completado');
+            });
+            flecha1.classList.remove('activa');
+            flecha2.classList.remove('activa');
+
+            if (pasoActivo >= 1) {
+                step1.classList.add('activo');
+                step1.querySelector('.step-numero').textContent = '1';
+            }
+            if (pasoActivo >= 2) {
+                step1.classList.remove('activo');
+                step1.classList.add('completado');
+                step1.querySelector('.step-numero').textContent = '✓';
+                flecha1.classList.add('activa');
+                step2.classList.add('activo');
+            }
+            if (pasoActivo >= 3) {
+                step2.classList.remove('activo');
+                step2.classList.add('completado');
+                step2.querySelector('.step-numero').textContent = '✓';
+                flecha2.classList.add('activa');
+                step3.classList.add('activo');
+            }
+        }
+
+        // ============================================
         // 🎵 NOTAS FLOTANDO DE FONDO
         // ============================================
         function crearNotasFondo() {
@@ -947,7 +1092,7 @@
         // ============================================
         function escribirSubtitulo() {
             const textos = [
-                'Homenaje a los grandes de la música argentina con inteligencia artificial',
+                'Homenaje a los grandes de la música argentina con IA',
                 '🎵 Escribí tu letra y elegí un estilo 🎵',
                 '🎤 Creá canciones únicas con IA 🎤'
             ];
@@ -985,7 +1130,7 @@
         }
 
         // ============================================
-        // 🔊 SISTEMA DE SONIDOS (Web Audio API)
+        // 🔊 SISTEMA DE SONIDOS
         // ============================================
         let audioContext = null;
         
@@ -1164,20 +1309,30 @@
 
             if (cantante.modelId) {
                 sonidoSeleccion();
-                showToast(`✅ Seleccionado: ${cantante.nombre}`, 'success', 2000);
+                showToast(`✅ Estilo elegido: ${cantante.nombre}`, 'success', 2000);
+                // Avanzar al paso 2 automáticamente
+                actualizarStepper(2);
+                // Scroll suave al paso 2
+                setTimeout(() => {
+                    document.getElementById('seccionPaso2').scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }, 500);
             } else {
                 sonidoError();
                 showToast(`⚠️ ${cantante.nombre} todavía no tiene voz asignada. Próximamente.`, 'warning', 3000);
             }
-
-            document.getElementById('letraCanta').focus();
         }
 
         // ============================================
         // CONTADOR
         // ============================================
         document.getElementById('letraCanta').addEventListener('input', function() {
-            document.getElementById('contadorCanta').textContent = this.value.length;
+            const largo = this.value.length;
+            document.getElementById('contadorCanta').textContent = largo;
+
+            // Si hay texto, avanzar al paso 3
+            if (largo > 0 && state.selected) {
+                actualizarStepper(3);
+            }
         });
 
         // ============================================
@@ -1189,12 +1344,14 @@
 
             if (!cantante) {
                 sonidoError();
-                showToast('👆 Primero seleccioná un estilo.', 'warning');
+                showToast('👆 Primero elegí un estilo.', 'warning');
+                document.getElementById('seccionPaso1').scrollIntoView({ behavior: 'smooth' });
                 return;
             }
             if (!texto) {
                 sonidoError();
                 showToast('✏️ Primero escribí tu letra.', 'error');
+                document.getElementById('letraCanta').focus();
                 return;
             }
             if (!cantante.modelId) {
@@ -1262,7 +1419,7 @@
             } finally {
                 state.isGenerating = false;
                 btnGen.disabled = false;
-                btnGen.textContent = '🎤 Generar Canción';
+                btnGen.textContent = '🎤 Crear mi canción';
                 estadoEl.style.display = 'none';
             }
         }
@@ -1309,6 +1466,7 @@
             crearNotasFondo();
             escribirSubtitulo();
             cargarCantantes();
+            actualizarStepper(1);
             document.getElementById('contadorCantaGeneradas').textContent = totalGeneradas;
             console.log('🎤 SONASTE CANTA cargado');
             console.log(`🎵 ${CANTANTES.length} estilos disponibles`);
