@@ -99,7 +99,7 @@
             border: 2px solid #FFC107;
             border-radius: 12px;
             padding: 18px 22px;
-            margin: 20px 0;
+            margin: 30px 0 20px 0;
             color: #856404;
             font-size: 13px;
             line-height: 1.6;
@@ -471,18 +471,6 @@
 
     <main class="contenedor">
 
-        <div class="aviso-legal">
-            <strong>⚠️ AVISO LEGAL IMPORTANTE</strong>
-            Las voces disponibles son <strong>RÉPLICAS DIGITALES GENÉRICAS</strong> creadas con inteligencia artificial. 
-            <strong>NO son las voces reales de los artistas mencionados</strong>, ni cuentan con su aprobación, patrocinio o autorización.
-            <ul>
-                <li>Prohibido presentar el audio como grabación real del artista</li>
-                <li>Prohibido el uso comercial sin autorización</li>
-                <li>Prohibido generar contenido difamatorio u ofensivo</li>
-                <li>Todo audio compartido debe etiquetarse como "Generado con IA - SONASTE CANTA"</li>
-            </ul>
-        </div>
-
         <h2 class="seccion-titulo">🎵 Elegí un estilo musical</h2>
         <p class="seccion-subtitulo">👆 Clic sobre el estilo para seleccionarlo</p>
 
@@ -521,6 +509,19 @@
                 Estilo: <span id="cantaEstilo">—</span>
             </div>
         </div>
+
+        <!-- AVISO LEGAL AL FINAL -->
+        <div class="aviso-legal">
+            <strong>⚠️ AVISO LEGAL IMPORTANTE</strong>
+            Las voces disponibles son <strong>RÉPLICAS DIGITALES GENÉRICAS</strong> creadas con inteligencia artificial. 
+            <strong>NO son las voces reales de los artistas mencionados</strong>, ni cuentan con su aprobación, patrocinio o autorización.
+            <ul>
+                <li>Prohibido presentar el audio como grabación real del artista</li>
+                <li>Prohibido el uso comercial sin autorización</li>
+                <li>Prohibido generar contenido difamatorio u ofensivo</li>
+                <li>Todo audio compartido debe etiquetarse como "Generado con IA - SONASTE CANTA"</li>
+            </ul>
+        </div>
     </main>
 
     <footer>
@@ -539,8 +540,6 @@
         // CONFIGURACIÓN
         // ============================================
         // ⚠️ IMPORTANTE: Esta URL apunta al backend de SONASTE original.
-        // Si más adelante creás un backend propio para SONASTE CANTA,
-        // cambiá esta línea por la URL nueva (o '' si es el mismo dominio).
         const API_BASE = 'https://sonaste.vercel.app';
         
         const MAX_CARACTERES = 500;
@@ -859,4 +858,3 @@
     </script>
 </body>
 </html>
-<!-- Deploy inicial -->
