@@ -26,6 +26,9 @@
             --primary: #6C3CE1;
             --primary-dark: #4A1F9E;
             --gold: #FFD700;
+            --pink: #FF6B9D;
+            --cyan: #4FC3F7;
+            --green: #4CAF50;
             --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
         body {
@@ -36,16 +39,105 @@
             display: flex;
             flex-direction: column;
             color: #e0e0e0;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* ============================================
+           🎵 NOTAS MUSICALES FLOTANDO DE FONDO
+           ============================================ */
+        #notas-fondo {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+        .nota-flotante {
+            position: absolute;
+            font-size: 24px;
+            opacity: 0.15;
+            animation: caerNota linear infinite;
+            user-select: none;
+        }
+        @keyframes caerNota {
+            0% {
+                transform: translateY(-100px) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.2;
+            }
+            90% {
+                opacity: 0.2;
+            }
+            100% {
+                transform: translateY(110vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Onda expansiva de fondo */
+        .onda-fondo {
+            position: fixed;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(108,60,225,0.08), transparent 70%);
+            pointer-events: none;
+            z-index: 0;
+            animation: ondaExpandir 6s ease-out infinite;
+        }
+        @keyframes ondaExpandir {
+            0% { transform: scale(0); opacity: 1; }
+            100% { transform: scale(1); opacity: 0; }
+        }
+
+        /* ============================================
+           🎸 BOTÓN SILENCIAR SONIDO
+           ============================================ */
+        #btnSonido {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            z-index: 100;
+            background: linear-gradient(135deg, #6C3CE1, #4A1F9E);
+            color: white;
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            font-size: 22px;
+            cursor: pointer;
+            box-shadow: 0 4px 20px rgba(108,60,225,0.5);
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        #btnSonido:hover { transform: scale(1.15) rotate(-10deg); }
+        #btnSonido.silenciado {
+            background: linear-gradient(135deg, #666, #444);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
         }
 
         /* BANNER */
         .promo-banner {
-            background: linear-gradient(135deg, #FF6B6B, #FF8E53, #FFC107);
+            background: linear-gradient(135deg, #FF6B6B, #FF8E53, #FFC107, #FF6B9D, #FF6B6B);
+            background-size: 400% 400%;
+            animation: gradienteBanner 8s ease infinite;
             color: #fff;
             text-align: center;
             padding: 12px;
             font-weight: 800;
             font-size: clamp(12px, 1.5vw, 18px);
+            position: relative;
+            z-index: 1;
+        }
+        @keyframes gradienteBanner {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
         }
         .promo-banner .gratis {
             background: #ff0000;
@@ -57,31 +149,108 @@
         }
         @keyframes pulse {
             0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
+            50% { transform: scale(1.08); }
         }
 
         /* HEADER */
         .header-canta {
-            background: linear-gradient(135deg, #1A1A2E, #0f0f1a);
-            padding: 35px 20px;
+            background: linear-gradient(135deg, #1A1A2E, #0f0f1a, #1a0a2e);
+            background-size: 200% 200%;
+            animation: fondoGradiente 10s ease infinite;
+            padding: 45px 20px 35px;
             text-align: center;
             border-bottom: 4px solid var(--primary);
+            position: relative;
+            z-index: 1;
+            overflow: hidden;
         }
+        @keyframes fondoGradiente {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        .header-canta::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(108,60,225,0.15), transparent);
+            animation: destello 5s ease-in-out infinite;
+        }
+        @keyframes destello {
+            0% { left: -100%; }
+            50%, 100% { left: 100%; }
+        }
+
+        .instrumentos {
+            font-size: clamp(24px, 4vw, 40px);
+            margin-bottom: 12px;
+            letter-spacing: 15px;
+            position: relative;
+            z-index: 2;
+        }
+        .instrumentos span {
+            display: inline-block;
+            animation: flotarInstrumento 3s ease-in-out infinite;
+        }
+        .instrumentos span:nth-child(1) { animation-delay: 0s; }
+        .instrumentos span:nth-child(2) { animation-delay: 0.3s; }
+        .instrumentos span:nth-child(3) { animation-delay: 0.6s; }
+        .instrumentos span:nth-child(4) { animation-delay: 0.9s; }
+        .instrumentos span:nth-child(5) { animation-delay: 1.2s; }
+        @keyframes flotarInstrumento {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-8px) rotate(5deg); }
+        }
+
         .header-canta h1 {
-            color: var(--gold);
             font-size: clamp(2rem, 6vw, 4.5rem);
             font-weight: 900;
             text-transform: uppercase;
             margin: 0;
             font-style: italic;
             letter-spacing: 2px;
-            text-shadow: 0 0 30px rgba(255, 215, 0, 0.4);
+            position: relative;
+            z-index: 2;
+            background: linear-gradient(90deg, #FFD700, #FF6B9D, #4FC3F7, #6C3CE1, #FFD700);
+            background-size: 300% 100%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: tituloArcoiris 5s ease infinite, brilloPulsante 2s ease-in-out infinite;
+            filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.4));
         }
+        @keyframes tituloArcoiris {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        @keyframes brilloPulsante {
+            0%, 100% { filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.4)); }
+            50% { filter: drop-shadow(0 0 40px rgba(255, 107, 157, 0.8)); }
+        }
+
         .header-canta .subtitulo {
-            color: #999;
+            color: #bbb;
             font-size: clamp(13px, 1.5vw, 16px);
-            margin-top: 10px;
+            margin-top: 14px;
             font-weight: 500;
+            position: relative;
+            z-index: 2;
+            min-height: 24px;
+        }
+        .subtitulo-cursor {
+            display: inline-block;
+            width: 2px;
+            height: 1em;
+            background: var(--gold);
+            animation: parpadeoCursor 0.8s step-end infinite;
+            vertical-align: middle;
+            margin-left: 2px;
+        }
+        @keyframes parpadeoCursor {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
         }
 
         /* CONTENEDOR */
@@ -91,6 +260,8 @@
             padding: 20px;
             flex: 1;
             width: 100%;
+            position: relative;
+            z-index: 1;
         }
 
         /* AVISO LEGAL */
@@ -103,6 +274,16 @@
             color: #856404;
             font-size: 13px;
             line-height: 1.6;
+            position: relative;
+            overflow: hidden;
+        }
+        .aviso-legal::before {
+            content: '⚠️';
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            font-size: 80px;
+            opacity: 0.08;
         }
         .aviso-legal strong {
             display: block;
@@ -123,7 +304,27 @@
             font-size: clamp(20px, 3vw, 26px);
             font-weight: 800;
             margin: 30px 0 10px;
+            position: relative;
+            display: inline-block;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 0 20px;
         }
+        .seccion-titulo::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--gold), transparent);
+            animation: lineaBrillo 2s ease-in-out infinite;
+        }
+        @keyframes lineaBrillo {
+            0%, 100% { opacity: 0.4; transform: scaleX(0.7); }
+            50% { opacity: 1; transform: scaleX(1); }
+        }
+
         .seccion-subtitulo {
             text-align: center;
             color: #999;
@@ -147,16 +348,47 @@
             cursor: pointer;
             transition: var(--transition);
             position: relative;
+            overflow: hidden;
+            animation: aparecerTarjeta 0.6s ease backwards;
+        }
+        @keyframes aparecerTarjeta {
+            from {
+                opacity: 0;
+                transform: translateY(30px) scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+        .cantante-card::before {
+            content: '🎵';
+            position: absolute;
+            top: 5px;
+            left: 5px;
+            font-size: 14px;
+            opacity: 0;
+            transition: var(--transition);
+        }
+        .cantante-card:hover::before {
+            opacity: 0.6;
+            animation: notaSaltar 0.6s ease;
+        }
+        @keyframes notaSaltar {
+            0% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-10px) rotate(-20deg); }
+            100% { transform: translateY(0) rotate(0deg); }
         }
         .cantante-card:hover:not(.seleccionado) {
             border-color: var(--primary);
-            transform: translateY(-4px);
-            box-shadow: 0 8px 30px rgba(108, 60, 225, 0.3);
+            transform: translateY(-6px) rotate(-1deg);
+            box-shadow: 0 12px 35px rgba(108, 60, 225, 0.4);
         }
         .cantante-card.seleccionado {
             border-color: var(--gold);
-            box-shadow: 0 0 0 3px var(--gold), 0 8px 30px rgba(255, 215, 0, 0.3);
-            transform: scale(1.05);
+            box-shadow: 0 0 0 3px var(--gold), 0 8px 30px rgba(255, 215, 0, 0.4);
+            transform: scale(1.06);
+            background: linear-gradient(135deg, #3a2a5e, #1a1a2e);
         }
         .cantante-card .avatar {
             width: 70px;
@@ -170,6 +402,16 @@
             font-weight: 900;
             color: white;
             border: 3px solid var(--primary);
+            transition: var(--transition);
+            position: relative;
+        }
+        .cantante-card.seleccionado .avatar {
+            animation: latidoAvatar 1s ease-in-out infinite;
+            border-color: var(--gold);
+        }
+        @keyframes latidoAvatar {
+            0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 215, 0, 0.7); }
+            50% { transform: scale(1.08); box-shadow: 0 0 0 12px rgba(255, 215, 0, 0); }
         }
         .cantante-card .nombre {
             font-size: 13px;
@@ -196,6 +438,19 @@
             letter-spacing: 0.5px;
         }
 
+        /* Onda expansiva al clic */
+        .onda-click {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(108, 60, 225, 0.6);
+            transform: scale(0);
+            animation: ondaClick 0.6s ease-out;
+            pointer-events: none;
+        }
+        @keyframes ondaClick {
+            to { transform: scale(4); opacity: 0; }
+        }
+
         /* FORMULARIO */
         .canta-form {
             margin-top: 30px;
@@ -203,6 +458,19 @@
             padding: 25px;
             border-radius: 16px;
             border: 2px solid var(--primary);
+            position: relative;
+            overflow: hidden;
+        }
+        .canta-form::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, #FFD700, #FF6B9D, #4FC3F7, #6C3CE1, #FFD700);
+            background-size: 200% 100%;
+            animation: tituloArcoiris 3s linear infinite;
         }
         .canta-form label {
             display: block;
@@ -227,7 +495,7 @@
         .canta-form textarea:focus {
             outline: none;
             border-color: var(--primary);
-            box-shadow: 0 0 0 4px rgba(108, 60, 225, 0.2);
+            box-shadow: 0 0 0 4px rgba(108, 60, 225, 0.2), 0 0 30px rgba(108, 60, 225, 0.3);
         }
         .canta-form .contador {
             text-align: right;
@@ -274,27 +542,53 @@
             transition: var(--transition);
             border: 0;
             min-width: 200px;
+            position: relative;
+            overflow: hidden;
         }
         .btn-canta-generar {
             background: linear-gradient(135deg, #6C3CE1, #4A1F9E);
             color: white;
             box-shadow: 0 4px 15px rgba(108, 60, 225, 0.4);
         }
+        .btn-canta-generar::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s;
+        }
+        .btn-canta-generar:hover:not(:disabled)::before {
+            left: 100%;
+        }
         .btn-canta-generar:hover:not(:disabled) {
             transform: scale(1.05);
-            box-shadow: 0 6px 25px rgba(108, 60, 225, 0.6);
+            box-shadow: 0 6px 25px rgba(108, 60, 225, 0.7);
+        }
+        .btn-canta-generar:not(:disabled) {
+            animation: brilloBoton 2s ease-in-out infinite;
+        }
+        @keyframes brilloBoton {
+            0%, 100% { box-shadow: 0 4px 15px rgba(108, 60, 225, 0.4); }
+            50% { box-shadow: 0 4px 30px rgba(108, 60, 225, 0.8), 0 0 40px rgba(108, 60, 225, 0.4); }
         }
         .btn-canta-descargar {
             background: linear-gradient(135deg, #4CAF50, #2E7D32);
             color: white;
             box-shadow: 0 4px 15px rgba(76, 175, 80, 0.4);
         }
-        .btn-canta-descargar:hover:not(:disabled) { transform: scale(1.05); }
+        .btn-canta-descargar:hover:not(:disabled) { 
+            transform: scale(1.05);
+            box-shadow: 0 6px 25px rgba(76, 175, 80, 0.7);
+        }
         .btn-canta-generar:disabled,
         .btn-canta-descargar:disabled {
             opacity: 0.5;
             cursor: not-allowed;
             transform: none;
+            animation: none;
         }
 
         /* RESULTADO */
@@ -305,6 +599,11 @@
             border-radius: 12px;
             border: 2px solid var(--primary);
             display: none;
+            animation: aparecerResultado 0.5s ease;
+        }
+        @keyframes aparecerResultado {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
         .canta-resultado .etiqueta-ia {
             display: inline-block;
@@ -338,21 +637,54 @@
             font-weight: 600;
             margin-top: 15px;
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
-            gap: 10px;
+            gap: 15px;
         }
-        .estado-cargando .spinner {
-            width: 22px;
-            height: 22px;
-            border: 3px solid #f3f3f3;
-            border-top: 3px solid var(--gold);
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
+        .ecualizador {
+            display: flex;
+            align-items: flex-end;
+            gap: 4px;
+            height: 40px;
         }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+        .ecualizador span {
+            display: block;
+            width: 6px;
+            background: linear-gradient(to top, #6C3CE1, #FFD700);
+            border-radius: 3px;
+            animation: ecualizar 0.8s ease-in-out infinite;
+        }
+        .ecualizador span:nth-child(1) { animation-delay: 0s; }
+        .ecualizador span:nth-child(2) { animation-delay: 0.1s; }
+        .ecualizador span:nth-child(3) { animation-delay: 0.2s; }
+        .ecualizador span:nth-child(4) { animation-delay: 0.3s; }
+        .ecualizador span:nth-child(5) { animation-delay: 0.4s; }
+        .ecualizador span:nth-child(6) { animation-delay: 0.5s; }
+        .ecualizador span:nth-child(7) { animation-delay: 0.6s; }
+        @keyframes ecualizar {
+            0%, 100% { height: 15%; }
+            50% { height: 100%; }
+        }
+
+        /* CONFETI MUSICAL */
+        .confeti {
+            position: fixed;
+            top: -30px;
+            font-size: 24px;
+            pointer-events: none;
+            z-index: 9999;
+            animation: caerConfeti 3s ease-in forwards;
+        }
+        @keyframes caerConfeti {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) rotate(720deg);
+                opacity: 0;
+            }
         }
 
         /* TOAST */
@@ -410,6 +742,8 @@
             margin-top: auto;
             border-top: 2px solid var(--primary);
             font-size: 14px;
+            position: relative;
+            z-index: 1;
         }
         footer span { color: var(--primary); }
         footer .estadisticas {
@@ -448,6 +782,7 @@
             .cantante-card .nombre { font-size: 11px; }
             .canta-botones button { min-width: 100%; }
             .toast-container { max-width: 90%; right: 5%; }
+            .instrumentos { letter-spacing: 8px; font-size: 22px; }
         }
 
         ::-webkit-scrollbar { width: 8px; height: 8px; }
@@ -457,6 +792,12 @@
     </style>
 </head>
 <body>
+    <!-- 🎵 NOTAS FLOTANDO DE FONDO -->
+    <div id="notas-fondo"></div>
+
+    <!-- 🔊 BOTÓN DE SONIDO -->
+    <button id="btnSonido" aria-label="Activar o silenciar sonidos" title="Activar/Silenciar sonidos">🔊</button>
+
     <div class="toast-container" id="toastContainer"></div>
 
     <div class="promo-banner">
@@ -465,8 +806,13 @@
     </div>
 
     <header class="header-canta">
+        <div class="instrumentos">
+            <span>🎸</span><span>🎹</span><span>🎺</span><span>🥁</span><span>🎻</span>
+        </div>
         <h1>🎤 ¡SONASTE CANTA! 🎤</h1>
-        <p class="subtitulo">Homenaje a los grandes de la música argentina con inteligencia artificial</p>
+        <p class="subtitulo" id="subtitulo">
+            <span id="textoSubtitulo"></span><span class="subtitulo-cursor"></span>
+        </p>
     </header>
 
     <main class="contenedor">
@@ -496,7 +842,10 @@
             </div>
 
             <div id="estadoCanta" class="estado-cargando" style="display:none;">
-                <span class="spinner"></span> ⏳ Generando canción...
+                <div class="ecualizador">
+                    <span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+                </div>
+                <div>⏳ Generando canción... 🎶</div>
             </div>
         </div>
 
@@ -539,131 +888,30 @@
         // ============================================
         // CONFIGURACIÓN
         // ============================================
-        // ⚠️ IMPORTANTE: Esta URL apunta al backend de SONASTE original.
         const API_BASE = 'https://sonaste.vercel.app';
         
         const MAX_CARACTERES = 500;
         let totalGeneradas = parseInt(localStorage.getItem('cantaGeneradas') || '0');
+        let sonidoActivado = localStorage.getItem('sonidoActivado') !== 'false';
 
         // ============================================
         // CANTANTES - 14 ESTILOS
         // ============================================
-        // ⚠️ IMPORTANTE: Los "modelId" son de voces GENÉRICAS de estilo.
-        // NUNCA uses IDs de voces de artistas reales sin consentimiento.
-        
         const CANTANTES = [
-            {
-                id: "tango_estilo_gardel",
-                nombre: "Tango Estilo Gardel",
-                genero: "Tango",
-                avatar: "TG",
-                color: "#D4A017",
-                modelId: "6142dd4d835e43ce9351a81a17ebf6dc"
-            },
-            {
-                id: "tango_estilo_sosa",
-                nombre: "Tango Estilo Julio Sosa",
-                genero: "Tango",
-                avatar: "JS",
-                color: "#B71C1C",
-                modelId: "b6831efda4284fd7ada0d0ee8b6fc797"
-            },
-            {
-                id: "folklore_estilo_sosa",
-                nombre: "Folklore Estilo Sosa",
-                genero: "Folklore",
-                avatar: "FS",
-                color: "#4CAF50",
-                modelId: "a65058497fcd47f1ad4d2ce771a92c82"
-            },
-            {
-                id: "infantil_estilo_wals",
-                nombre: "Infantil Estilo María Elena Walsh",
-                genero: "Infantil",
-                avatar: "MW",
-                color: "#E91E63",
-                modelId: "31e6d765c0cf4c018b6ef5a695d77da8"
-            },
-            {
-                id: "rock_estilo_cerati",
-                nombre: "Rock Estilo Cerati",
-                genero: "Rock",
-                avatar: "RC",
-                color: "#2196F3",
-                modelId: "034eb2af538f48488029761bf1ad6a3d"
-            },
-            {
-                id: "rock_estilo_charly",
-                nombre: "Rock Estilo Charly",
-                genero: "Rock",
-                avatar: "RCh",
-                color: "#9C27B0",
-                modelId: "5f1f27a3b98c4ed5b4b6f24d3eb066d4"
-            },
-            {
-                id: "rock_estilo_spinetta",
-                nombre: "Rock Estilo Spinetta",
-                genero: "Rock",
-                avatar: "RS",
-                color: "#607D8B",
-                modelId: "8e73676c62b24d9d90e47dc16848ae97"
-            },
-            {
-                id: "rock_estilo_fito",
-                nombre: "Rock Estilo Fito",
-                genero: "Rock/Pop",
-                avatar: "RF",
-                color: "#FF5722",
-                modelId: "2bb51f6a68444ccd8da9697ac94bb05a"
-            },
-            {
-                id: "rock_estilo_calamaro",
-                nombre: "Rock Estilo Calamaro",
-                genero: "Rock",
-                avatar: "RCa",
-                color: "#795548",
-                modelId: "e6b19834a1d0407b8d90bd1d334ee651"
-            },
-            {
-                id: "folklore_estilo_gieco",
-                nombre: "Folklore Estilo Gieco",
-                genero: "Folklore/Rock",
-                avatar: "FG",
-                color: "#8BC34A",
-                modelId: "197a85a3f3e341eb8e4430411f0dd69d"
-            },
-            {
-                id: "folklore_estilo_heredia",
-                nombre: "Folklore Estilo Heredia",
-                genero: "Folklore",
-                avatar: "FH",
-                color: "#009688",
-                modelId: "d583b30877fd4ac8a2f339b63900afd5"
-            },
-            {
-                id: "rock_pesado_estilo_pappo",
-                nombre: "Rock Pesado Estilo Pappo",
-                genero: "Rock Pesado",
-                avatar: "RP",
-                color: "#F44336",
-                modelId: "ca88322266d040758e862838d76859dc"
-            },
-            {
-                id: "rock_alternativo_estilo_indio",
-                nombre: "Rock Alternativo Estilo Indio",
-                genero: "Rock Alternativo",
-                avatar: "RA",
-                color: "#673AB7",
-                modelId: "87cdb13e1cc64ff79aefcbc6eb986500"
-            },
-            {
-                id: "balada_estilo_sandro",
-                nombre: "Balada Estilo Sandro",
-                genero: "Rock/Balada",
-                avatar: "BS",
-                color: "#E91E63",
-                modelId: "82b7eadd15a244a3b74d085ffff3d488"
-            }
+            { id: "tango_estilo_gardel", nombre: "Tango Estilo Gardel", genero: "Tango", avatar: "TG", color: "#D4A017", modelId: "6142dd4d835e43ce9351a81a17ebf6dc" },
+            { id: "tango_estilo_sosa", nombre: "Tango Estilo Julio Sosa", genero: "Tango", avatar: "JS", color: "#B71C1C", modelId: "b6831efda4284fd7ada0d0ee8b6fc797" },
+            { id: "folklore_estilo_sosa", nombre: "Folklore Estilo Sosa", genero: "Folklore", avatar: "FS", color: "#4CAF50", modelId: "a65058497fcd47f1ad4d2ce771a92c82" },
+            { id: "infantil_estilo_wals", nombre: "Infantil Estilo María Elena Walsh", genero: "Infantil", avatar: "MW", color: "#E91E63", modelId: "31e6d765c0cf4c018b6ef5a695d77da8" },
+            { id: "rock_estilo_cerati", nombre: "Rock Estilo Cerati", genero: "Rock", avatar: "RC", color: "#2196F3", modelId: "034eb2af538f48488029761bf1ad6a3d" },
+            { id: "rock_estilo_charly", nombre: "Rock Estilo Charly", genero: "Rock", avatar: "RCh", color: "#9C27B0", modelId: "5f1f27a3b98c4ed5b4b6f24d3eb066d4" },
+            { id: "rock_estilo_spinetta", nombre: "Rock Estilo Spinetta", genero: "Rock", avatar: "RS", color: "#607D8B", modelId: "8e73676c62b24d9d90e47dc16848ae97" },
+            { id: "rock_estilo_fito", nombre: "Rock Estilo Fito", genero: "Rock/Pop", avatar: "RF", color: "#FF5722", modelId: "2bb51f6a68444ccd8da9697ac94bb05a" },
+            { id: "rock_estilo_calamaro", nombre: "Rock Estilo Calamaro", genero: "Rock", avatar: "RCa", color: "#795548", modelId: "e6b19834a1d0407b8d90bd1d334ee651" },
+            { id: "folklore_estilo_gieco", nombre: "Folklore Estilo Gieco", genero: "Folklore/Rock", avatar: "FG", color: "#8BC34A", modelId: "197a85a3f3e341eb8e4430411f0dd69d" },
+            { id: "folklore_estilo_heredia", nombre: "Folklore Estilo Heredia", genero: "Folklore", avatar: "FH", color: "#009688", modelId: "d583b30877fd4ac8a2f339b63900afd5" },
+            { id: "rock_pesado_estilo_pappo", nombre: "Rock Pesado Estilo Pappo", genero: "Rock Pesado", avatar: "RP", color: "#F44336", modelId: "ca88322266d040758e862838d76859dc" },
+            { id: "rock_alternativo_estilo_indio", nombre: "Rock Alternativo Estilo Indio", genero: "Rock Alternativo", avatar: "RA", color: "#673AB7", modelId: "87cdb13e1cc64ff79aefcbc6eb986500" },
+            { id: "balada_estilo_sandro", nombre: "Balada Estilo Sandro", genero: "Rock/Balada", avatar: "BS", color: "#E91E63", modelId: "82b7eadd15a244a3b74d085ffff3d488" }
         ];
 
         // Estado
@@ -672,6 +920,149 @@
             isGenerating: false,
             audioBlob: null,
         };
+
+        // ============================================
+        // 🎵 NOTAS FLOTANDO DE FONDO
+        // ============================================
+        function crearNotasFondo() {
+            const contenedor = document.getElementById('notas-fondo');
+            const notas = ['🎵', '🎶', '🎼', '♫', '♪', '🎤', '🎸', '🎹', '🎺', '🥁', '🎻'];
+            const cantidad = 20;
+
+            for (let i = 0; i < cantidad; i++) {
+                const nota = document.createElement('div');
+                nota.className = 'nota-flotante';
+                nota.textContent = notas[Math.floor(Math.random() * notas.length)];
+                nota.style.left = Math.random() * 100 + '%';
+                nota.style.animationDuration = (8 + Math.random() * 12) + 's';
+                nota.style.animationDelay = Math.random() * 10 + 's';
+                nota.style.fontSize = (16 + Math.random() * 20) + 'px';
+                nota.style.color = ['#6C3CE1', '#FFD700', '#FF6B9D', '#4FC3F7'][Math.floor(Math.random() * 4)];
+                contenedor.appendChild(nota);
+            }
+        }
+
+        // ============================================
+        // ✨ SUBTÍTULO MÁQUINA DE ESCRIBIR
+        // ============================================
+        function escribirSubtitulo() {
+            const textos = [
+                'Homenaje a los grandes de la música argentina con inteligencia artificial',
+                '🎵 Escribí tu letra y elegí un estilo 🎵',
+                '🎤 Creá canciones únicas con IA 🎤'
+            ];
+            const elemento = document.getElementById('textoSubtitulo');
+            let textoActual = 0;
+            let letraActual = 0;
+            let borrando = false;
+
+            function ciclo() {
+                const texto = textos[textoActual];
+                
+                if (borrando) {
+                    elemento.textContent = texto.substring(0, letraActual - 1);
+                    letraActual--;
+                } else {
+                    elemento.textContent = texto.substring(0, letraActual + 1);
+                    letraActual++;
+                }
+
+                let velocidad = borrando ? 30 : 60;
+
+                if (!borrando && letraActual === texto.length) {
+                    velocidad = 2500;
+                    borrando = true;
+                } else if (borrando && letraActual === 0) {
+                    borrando = false;
+                    textoActual = (textoActual + 1) % textos.length;
+                    velocidad = 500;
+                }
+
+                setTimeout(ciclo, velocidad);
+            }
+
+            ciclo();
+        }
+
+        // ============================================
+        // 🔊 SISTEMA DE SONIDOS (Web Audio API)
+        // ============================================
+        let audioContext = null;
+        
+        function initAudioContext() {
+            if (!audioContext) {
+                try {
+                    audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                } catch (e) {
+                    console.log('AudioContext no soportado');
+                }
+            }
+            return audioContext;
+        }
+
+        function reproducirNota(frecuencia, duracion = 0.2, tipo = 'sine', volumen = 0.15) {
+            if (!sonidoActivado) return;
+            const ctx = initAudioContext();
+            if (!ctx) return;
+            if (ctx.state === 'suspended') ctx.resume();
+
+            const oscilador = ctx.createOscillator();
+            const ganancia = ctx.createGain();
+
+            oscilador.type = tipo;
+            oscilador.frequency.value = frecuencia;
+            oscilador.connect(ganancia);
+            ganancia.connect(ctx.destination);
+
+            ganancia.gain.setValueAtTime(0, ctx.currentTime);
+            ganancia.gain.linearRampToValueAtTime(volumen, ctx.currentTime + 0.01);
+            ganancia.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + duracion);
+
+            oscilador.start(ctx.currentTime);
+            oscilador.stop(ctx.currentTime + duracion);
+        }
+
+        function sonidoSeleccion() {
+            reproducirNota(880, 0.15, 'sine', 0.12);
+            setTimeout(() => reproducirNota(1108, 0.2, 'sine', 0.1), 80);
+        }
+
+        function sonidoGenerar() {
+            [523, 659, 784].forEach((nota, i) => {
+                setTimeout(() => reproducirNota(nota, 0.15, 'triangle', 0.1), i * 60);
+            });
+        }
+
+        function sonidoExito() {
+            [523, 659, 784, 1046, 1318].forEach((nota, i) => {
+                setTimeout(() => reproducirNota(nota, 0.35, 'sine', 0.12), i * 100);
+            });
+        }
+
+        function sonidoError() {
+            reproducirNota(200, 0.3, 'sawtooth', 0.1);
+            setTimeout(() => reproducirNota(150, 0.4, 'sawtooth', 0.1), 150);
+        }
+
+        // Botón de sonido
+        const btnSonido = document.getElementById('btnSonido');
+        if (!sonidoActivado) {
+            btnSonido.textContent = '🔇';
+            btnSonido.classList.add('silenciado');
+        }
+
+        btnSonido.addEventListener('click', () => {
+            sonidoActivado = !sonidoActivado;
+            localStorage.setItem('sonidoActivado', sonidoActivado ? 'true' : 'false');
+            btnSonido.textContent = sonidoActivado ? '🔊' : '🔇';
+            btnSonido.classList.toggle('silenciado', !sonidoActivado);
+            if (sonidoActivado) {
+                sonidoSeleccion();
+                showToast('🔊 Sonidos activados', 'success', 1500);
+            } else {
+                showToast('🔇 Sonidos silenciados', 'info', 1500);
+            }
+        });
 
         // ============================================
         // TOAST
@@ -691,18 +1082,40 @@
         }
 
         // ============================================
+        // 🎉 CONFETI MUSICAL
+        // ============================================
+        function lanzarConfeti() {
+            const notas = ['🎵', '🎶', '🎼', '🎤', '🎸', '🎹', '🎺', '🥁', '🎻', '✨', '🌟', '⭐'];
+            const cantidad = 40;
+
+            for (let i = 0; i < cantidad; i++) {
+                setTimeout(() => {
+                    const confeti = document.createElement('div');
+                    confeti.className = 'confeti';
+                    confeti.textContent = notas[Math.floor(Math.random() * notas.length)];
+                    confeti.style.left = Math.random() * 100 + '%';
+                    confeti.style.fontSize = (18 + Math.random() * 20) + 'px';
+                    confeti.style.animationDuration = (2 + Math.random() * 2) + 's';
+                    document.body.appendChild(confeti);
+                    setTimeout(() => confeti.remove(), 4500);
+                }, i * 40);
+            }
+        }
+
+        // ============================================
         // CARGAR GALERÍA
         // ============================================
         function cargarCantantes() {
             const contenedor = document.getElementById('cantantesGrid');
             contenedor.innerHTML = '';
 
-            CANTANTES.forEach(c => {
+            CANTANTES.forEach((c, index) => {
                 const card = document.createElement('div');
                 card.className = 'cantante-card';
                 card.setAttribute('tabindex', '0');
                 card.setAttribute('role', 'button');
                 card.setAttribute('aria-label', `Seleccionar ${c.nombre}`);
+                card.style.animationDelay = (index * 0.05) + 's';
 
                 card.innerHTML = `
                     <span class="badge-legal">GENÉRICA</span>
@@ -713,7 +1126,10 @@
                     <div class="genero">${c.genero}</div>
                 `;
 
-                card.addEventListener('click', () => seleccionar(c, card));
+                card.addEventListener('click', (e) => {
+                    crearOndaClick(e, card);
+                    seleccionar(c, card);
+                });
                 card.addEventListener('keydown', (e) => {
                     if (e.key === 'Enter' || e.key === ' ') {
                         e.preventDefault();
@@ -727,6 +1143,18 @@
             document.getElementById('contadorCantaEstilos').textContent = CANTANTES.length;
         }
 
+        function crearOndaClick(evento, elemento) {
+            const rect = elemento.getBoundingClientRect();
+            const onda = document.createElement('span');
+            onda.className = 'onda-click';
+            const tamaño = Math.max(rect.width, rect.height);
+            onda.style.width = onda.style.height = tamaño + 'px';
+            onda.style.left = (evento.clientX - rect.left - tamaño / 2) + 'px';
+            onda.style.top = (evento.clientY - rect.top - tamaño / 2) + 'px';
+            elemento.appendChild(onda);
+            setTimeout(() => onda.remove(), 600);
+        }
+
         function seleccionar(cantante, card) {
             document.querySelectorAll('.cantante-card').forEach(el => el.classList.remove('seleccionado'));
             card.classList.add('seleccionado');
@@ -735,8 +1163,10 @@
             document.getElementById('btnCantaGenerar').disabled = false;
 
             if (cantante.modelId) {
+                sonidoSeleccion();
                 showToast(`✅ Seleccionado: ${cantante.nombre}`, 'success', 2000);
             } else {
+                sonidoError();
                 showToast(`⚠️ ${cantante.nombre} todavía no tiene voz asignada. Próximamente.`, 'warning', 3000);
             }
 
@@ -758,14 +1188,17 @@
             const texto = document.getElementById('letraCanta').value.trim();
 
             if (!cantante) {
+                sonidoError();
                 showToast('👆 Primero seleccioná un estilo.', 'warning');
                 return;
             }
             if (!texto) {
+                sonidoError();
                 showToast('✏️ Primero escribí tu letra.', 'error');
                 return;
             }
             if (!cantante.modelId) {
+                sonidoError();
                 showToast(`⚠️ ${cantante.nombre} todavía no tiene voz asignada. Próximamente.`, 'warning', 4000);
                 return;
             }
@@ -785,6 +1218,8 @@
             btnGen.textContent = '⏳ Generando...';
             btnDesc.disabled = true;
             estadoEl.style.display = 'flex';
+
+            sonidoGenerar();
 
             const startTime = Date.now();
 
@@ -809,7 +1244,10 @@
                 document.getElementById('cantaEstilo').textContent = cantante.nombre;
 
                 btnDesc.disabled = false;
-                showToast(`✅ Canción generada con ${cantante.nombre}`, 'success', 3000);
+
+                sonidoExito();
+                lanzarConfeti();
+                showToast(`🎉 ¡Canción generada con ${cantante.nombre}!`, 'success', 3000);
 
                 totalGeneradas++;
                 localStorage.setItem('cantaGeneradas', totalGeneradas.toString());
@@ -819,6 +1257,7 @@
 
             } catch (error) {
                 console.error('❌ Error:', error);
+                sonidoError();
                 showToast(`❌ Error: ${error.message}`, 'error', 5000);
             } finally {
                 state.isGenerating = false;
@@ -833,6 +1272,7 @@
         // ============================================
         function descargar() {
             if (!state.audioBlob) {
+                sonidoError();
                 showToast('❌ No hay audio para descargar.', 'error');
                 return;
             }
@@ -845,6 +1285,7 @@
             a.click();
             document.body.removeChild(a);
             setTimeout(() => URL.revokeObjectURL(url), 1000);
+            reproducirNota(660, 0.2, 'sine', 0.12);
             showToast('📥 Descargando...', 'success', 2000);
         }
 
@@ -865,10 +1306,13 @@
         // INICIALIZACIÓN
         // ============================================
         document.addEventListener('DOMContentLoaded', function() {
+            crearNotasFondo();
+            escribirSubtitulo();
             cargarCantantes();
             document.getElementById('contadorCantaGeneradas').textContent = totalGeneradas;
             console.log('🎤 SONASTE CANTA cargado');
             console.log(`🎵 ${CANTANTES.length} estilos disponibles`);
+            console.log(`🔊 Sonidos: ${sonidoActivado ? 'activados' : 'silenciados'}`);
         });
     </script>
 </body>
