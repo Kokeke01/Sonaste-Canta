@@ -364,6 +364,372 @@
             display: flex;
             flex-direction: column;
             gap: 10px;
+            max-width: 350px;<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>¡SONASTE CANTA! - Homenaje a la música argentina con IA</title>
+    
+    <meta name="description" content="Homenaje a los grandes de la música argentina con IA. Voces genéricas de estilo. Uso educativo y de homenaje." />
+    <meta name="author" content="SONASTE CANTA" />
+    <link rel="canonical" href="https://sonaste-canta.vercel.app" />
+    
+    <meta property="og:title" content="¡SONASTE CANTA! - Homenaje a la música argentina con IA" />
+    <meta property="og:description" content="Elegí un estilo musical y escribí tu letra. Voces genéricas con IA." />
+    <meta property="og:url" content="https://sonaste-canta.vercel.app" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <meta name="theme-color" content="#6C3CE1">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        :root {
+            --primary: #6C3CE1;
+            --primary-dark: #4A1F9E;
+            --gold: #FFD700;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0f0f1a;
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            color: #e0e0e0;
+        }
+
+        /* BANNER */
+        .promo-banner {
+            background: linear-gradient(135deg, #FF6B6B, #FF8E53, #FFC107);
+            color: #fff;
+            text-align: center;
+            padding: 12px;
+            font-weight: 800;
+            font-size: clamp(12px, 1.5vw, 18px);
+        }
+        .promo-banner .gratis {
+            background: #ff0000;
+            padding: 2px 10px;
+            border-radius: 20px;
+            margin-right: 8px;
+            animation: pulse 1s infinite;
+            display: inline-block;
+        }
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        /* HEADER */
+        .header-canta {
+            background: linear-gradient(135deg, #1A1A2E, #0f0f1a);
+            padding: 35px 20px;
+            text-align: center;
+            border-bottom: 4px solid var(--primary);
+        }
+        .header-canta h1 {
+            color: var(--gold);
+            font-size: clamp(2rem, 6vw, 4.5rem);
+            font-weight: 900;
+            text-transform: uppercase;
+            margin: 0;
+            font-style: italic;
+            letter-spacing: 2px;
+            text-shadow: 0 0 30px rgba(255, 215, 0, 0.4);
+        }
+        .header-canta .subtitulo {
+            color: #999;
+            font-size: clamp(13px, 1.5vw, 16px);
+            margin-top: 10px;
+            font-weight: 500;
+        }
+
+        /* CONTENEDOR */
+        .contenedor {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 20px;
+            flex: 1;
+            width: 100%;
+        }
+
+        /* AVISO LEGAL */
+        .aviso-legal {
+            background: #FFF3CD;
+            border: 2px solid #FFC107;
+            border-radius: 12px;
+            padding: 18px 22px;
+            margin: 30px 0 20px 0;
+            color: #856404;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+        .aviso-legal strong {
+            display: block;
+            font-size: 15px;
+            margin-bottom: 8px;
+            color: #6d4c00;
+        }
+        .aviso-legal ul {
+            margin: 8px 0 0 20px;
+            padding: 0;
+        }
+        .aviso-legal li { margin-bottom: 4px; }
+
+        /* SECCIÓN TÍTULOS */
+        .seccion-titulo {
+            text-align: center;
+            color: var(--gold);
+            font-size: clamp(20px, 3vw, 26px);
+            font-weight: 800;
+            margin: 30px 0 10px;
+        }
+        .seccion-subtitulo {
+            text-align: center;
+            color: #999;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+
+        /* GALERÍA */
+        .cantantes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 14px;
+            margin: 20px 0;
+        }
+        .cantante-card {
+            background: linear-gradient(135deg, #2a2a3e, #1a1a2e);
+            border: 2px solid #4a4a5e;
+            border-radius: 12px;
+            padding: 18px 12px;
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+        }
+        .cantante-card:hover:not(.seleccionado) {
+            border-color: var(--primary);
+            transform: translateY(-4px);
+            box-shadow: 0 8px 30px rgba(108, 60, 225, 0.3);
+        }
+        .cantante-card.seleccionado {
+            border-color: var(--gold);
+            box-shadow: 0 0 0 3px var(--gold), 0 8px 30px rgba(255, 215, 0, 0.3);
+            transform: scale(1.05);
+        }
+        .cantante-card .avatar {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            margin: 0 auto 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 26px;
+            font-weight: 900;
+            color: white;
+            border: 3px solid var(--primary);
+        }
+        .cantante-card .nombre {
+            font-size: 13px;
+            font-weight: 700;
+            color: #e0e0e0;
+            line-height: 1.3;
+        }
+        .cantante-card .genero {
+            font-size: 11px;
+            color: var(--primary);
+            margin-top: 6px;
+            font-weight: 600;
+        }
+        .cantante-card .badge-legal {
+            position: absolute;
+            top: 6px;
+            right: 6px;
+            background: rgba(255, 193, 7, 0.95);
+            color: #333;
+            font-size: 7px;
+            padding: 3px 7px;
+            border-radius: 10px;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+        }
+
+        /* FORMULARIO */
+        .canta-form {
+            margin-top: 30px;
+            background: linear-gradient(135deg, #1A1A2E, #0f0f1a);
+            padding: 25px;
+            border-radius: 16px;
+            border: 2px solid var(--primary);
+        }
+        .canta-form label {
+            display: block;
+            color: var(--gold);
+            font-weight: 800;
+            font-size: 17px;
+            margin-bottom: 10px;
+        }
+        .canta-form textarea {
+            width: 100%;
+            padding: 16px;
+            border-radius: 12px;
+            border: 2px solid #4a4a5e;
+            background: #2a2a3e;
+            color: #e0e0e0;
+            font-size: 15px;
+            font-family: 'Inter', sans-serif;
+            resize: vertical;
+            min-height: 120px;
+            transition: var(--transition);
+        }
+        .canta-form textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(108, 60, 225, 0.2);
+        }
+        .canta-form .contador {
+            text-align: right;
+            font-size: 12px;
+            color: #666;
+            margin-top: 6px;
+        }
+        .canta-form .consejo {
+            background: #1a2a3a;
+            border-left: 4px solid #4FC3F7;
+            padding: 10px 16px;
+            margin: 8px 0 14px 0;
+            border-radius: 4px;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            font-size: 13px;
+        }
+        .canta-form .consejo .icono {
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+        .canta-form .consejo strong { color: #4FC3F7; }
+        .canta-form .consejo .ejemplo {
+            font-size: 12px;
+            color: #999;
+            margin-top: 2px;
+        }
+
+        /* BOTONES */
+        .canta-botones {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+        .canta-botones button {
+            padding: 15px 40px;
+            border-radius: 50px;
+            font-weight: 800;
+            font-size: 16px;
+            cursor: pointer;
+            transition: var(--transition);
+            border: 0;
+            min-width: 200px;
+        }
+        .btn-canta-generar {
+            background: linear-gradient(135deg, #6C3CE1, #4A1F9E);
+            color: white;
+            box-shadow: 0 4px 15px rgba(108, 60, 225, 0.4);
+        }
+        .btn-canta-generar:hover:not(:disabled) {
+            transform: scale(1.05);
+            box-shadow: 0 6px 25px rgba(108, 60, 225, 0.6);
+        }
+        .btn-canta-descargar {
+            background: linear-gradient(135deg, #4CAF50, #2E7D32);
+            color: white;
+            box-shadow: 0 4px 15px rgba(76, 175, 80, 0.4);
+        }
+        .btn-canta-descargar:hover:not(:disabled) { transform: scale(1.05); }
+        .btn-canta-generar:disabled,
+        .btn-canta-descargar:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* RESULTADO */
+        .canta-resultado {
+            margin-top: 25px;
+            padding: 22px;
+            background: linear-gradient(135deg, #2a1a3e, #1a1a2e);
+            border-radius: 12px;
+            border: 2px solid var(--primary);
+            display: none;
+        }
+        .canta-resultado .etiqueta-ia {
+            display: inline-block;
+            background: #FFC107;
+            color: #333;
+            font-size: 11px;
+            font-weight: 800;
+            padding: 4px 12px;
+            border-radius: 10px;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .canta-resultado audio {
+            width: 100%;
+            border-radius: 8px;
+        }
+        .canta-resultado .info {
+            margin-top: 12px;
+            font-size: 12px;
+            color: #999;
+        }
+        .canta-resultado .info span {
+            color: var(--gold);
+            font-weight: 700;
+        }
+
+        /* ESTADO */
+        .estado-cargando {
+            color: #FFC107;
+            font-weight: 600;
+            margin-top: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        .estado-cargando .spinner {
+            width: 22px;
+            height: 22px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid var(--gold);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* TOAST */
+        .toast-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
             max-width: 350px;
             width: 100%;
         }
@@ -546,10 +912,11 @@
         let totalGeneradas = parseInt(localStorage.getItem('cantaGeneradas') || '0');
 
         // ============================================
-        // CANTANTES - 14 ESTILOS
+        // CANTANTES - 12 ESTILOS
         // ============================================
         // ⚠️ IMPORTANTE: Los "modelId" son de voces GENÉRICAS de estilo.
         // NUNCA uses IDs de voces de artistas reales sin consentimiento.
+        // Los que están vacíos "" hay que completarlos cuando consigas los IDs.
         
         const CANTANTES = [
             {
@@ -561,28 +928,12 @@
                 modelId: "6142dd4d835e43ce9351a81a17ebf6dc"
             },
             {
-                id: "tango_estilo_sosa",
-                nombre: "Tango Estilo Julio Sosa",
-                genero: "Tango",
-                avatar: "JS",
-                color: "#B71C1C",
-                modelId: "b6831efda4284fd7ada0d0ee8b6fc797"
-            },
-            {
                 id: "folklore_estilo_sosa",
                 nombre: "Folklore Estilo Sosa",
                 genero: "Folklore",
                 avatar: "FS",
                 color: "#4CAF50",
                 modelId: "a65058497fcd47f1ad4d2ce771a92c82"
-            },
-            {
-                id: "infantil_estilo_wals",
-                nombre: "Infantil Estilo María Elena Walsh",
-                genero: "Infantil",
-                avatar: "MW",
-                color: "#E91E63",
-                modelId: "31e6d765c0cf4c018b6ef5a695d77da8"
             },
             {
                 id: "rock_estilo_cerati",
@@ -646,7 +997,500 @@
                 genero: "Rock Pesado",
                 avatar: "RP",
                 color: "#F44336",
-                modelId: "ca88322266d040758e862838d76859dc"
+                modelId: "d8508b39668241db8274544200c3f142"
+            },
+            {
+                id: "rock_alternativo_estilo_indio",
+                nombre: "Rock Alternativo Estilo Indio",
+                genero: "Rock Alternativo",
+                avatar: "RA",
+                color: "#673AB7",
+                modelId: "87cdb13e1cc64ff79aefcbc6eb986500"
+            },
+            {
+                id: "balada_estilo_sandro",
+                nombre: "Balada Estilo Sandro",
+                genero: "Rock/Balada",
+                avatar: "BS",
+                color: "#E91E63",
+                modelId: "82b7eadd15a244a3b74d085ffff3d488"
+            }
+        ];
+
+        // Estado
+        const state = {
+            selected: null,
+            isGenerating: false,
+            audioBlob: null,
+        };
+
+        // ============================================
+        // TOAST
+        // ============================================
+        function showToast(message, type = 'info', duration = 4000) {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = `toast toast-${type}`;
+            const icons = { success: '✅', error: '❌', info: 'ℹ️', warning: '⚠️' };
+            toast.innerHTML = `
+                <span>${icons[type] || 'ℹ️'}</span>
+                <span>${message}</span>
+                <button class="toast-close" onclick="this.parentElement.remove()">×</button>
+            `;
+            container.appendChild(toast);
+            setTimeout(() => { if (toast.parentElement) toast.remove(); }, duration);
+        }
+
+        // ============================================
+        // CARGAR GALERÍA
+        // ============================================
+        function cargarCantantes() {
+            const contenedor = document.getElementById('cantantesGrid');
+            contenedor.innerHTML = '';
+
+            CANTANTES.forEach(c => {
+                const card = document.createElement('div');
+                card.className = 'cantante-card';
+                card.setAttribute('tabindex', '0');
+                card.setAttribute('role', 'button');
+                card.setAttribute('aria-label', `Seleccionar ${c.nombre}`);
+
+                card.innerHTML = `
+                    <span class="badge-legal">GENÉRICA</span>
+                    <div class="avatar" style="background: linear-gradient(135deg, ${c.color}, #1a1a2e);">
+                        ${c.avatar}
+                    </div>
+                    <div class="nombre">${c.nombre}</div>
+                    <div class="genero">${c.genero}</div>
+                `;
+
+                card.addEventListener('click', () => seleccionar(c, card));
+                card.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        seleccionar(c, card);
+                    }
+                });
+
+                contenedor.appendChild(card);
+            });
+
+            document.getElementById('contadorCantaEstilos').textContent = CANTANTES.length;
+        }
+
+        function seleccionar(cantante, card) {
+            document.querySelectorAll('.cantante-card').forEach(el => el.classList.remove('seleccionado'));
+            card.classList.add('seleccionado');
+            state.selected = cantante;
+
+            document.getElementById('btnCantaGenerar').disabled = false;
+
+            if (cantante.modelId) {
+                showToast(`✅ Seleccionado: ${cantante.nombre}`, 'success', 2000);
+            } else {
+                showToast(`⚠️ ${cantante.nombre} todavía no tiene voz asignada. Próximamente.`, 'warning', 3000);
+            }
+
+            document.getElementById('letraCanta').focus();
+        }
+
+        // ============================================
+        // CONTADOR
+        // ============================================
+        document.getElementById('letraCanta').addEventListener('input', function() {
+            document.getElementById('contadorCanta').textContent = this.value.length;
+        });
+
+        // ============================================
+        // GENERAR
+        // ============================================
+        async function generar() {
+            const cantante = state.selected;
+            const texto = document.getElementById('letraCanta').value.trim();
+
+            if (!cantante) {
+                showToast('👆 Primero seleccioná un estilo.', 'warning');
+                return;
+            }
+            if (!texto) {
+                showToast('✏️ Primero escribí tu letra.', 'error');
+                return;
+            }
+            if (!cantante.modelId) {
+                showToast(`⚠️ ${cantante.nombre} todavía no tiene voz asignada. Próximamente.`, 'warning', 4000);
+                return;
+            }
+            if (state.isGenerating) {
+                showToast('⏳ Ya se está generando.', 'info');
+                return;
+            }
+
+            const btnGen = document.getElementById('btnCantaGenerar');
+            const btnDesc = document.getElementById('btnCantaDescargar');
+            const resultado = document.getElementById('cantaResultado');
+            const audio = document.getElementById('cantaAudio');
+            const estadoEl = document.getElementById('estadoCanta');
+
+            state.isGenerating = true;
+            btnGen.disabled = true;
+            btnGen.textContent = '⏳ Generando...';
+            btnDesc.disabled = true;
+            estadoEl.style.display = 'flex';
+
+            const startTime = Date.now();
+
+            try {
+                const response = await fetch(`${API_BASE}/api/tts`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ text: texto, modelId: cantante.modelId })
+                });
+
+                if (!response.ok) throw new Error(`Error ${response.status}`);
+
+                const audioBlob = await response.blob();
+                if (audioBlob.size === 0) throw new Error('El audio está vacío');
+
+                state.audioBlob = audioBlob;
+                audio.src = URL.createObjectURL(audioBlob);
+                resultado.style.display = 'block';
+
+                document.getElementById('cantaTiempo').textContent = Date.now() - startTime;
+                document.getElementById('cantaTamano').textContent = (audioBlob.size / 1024).toFixed(1);
+                document.getElementById('cantaEstilo').textContent = cantante.nombre;
+
+                btnDesc.disabled = false;
+                showToast(`✅ Canción generada con ${cantante.nombre}`, 'success', 3000);
+
+                totalGeneradas++;
+                localStorage.setItem('cantaGeneradas', totalGeneradas.toString());
+                document.getElementById('contadorCantaGeneradas').textContent = totalGeneradas;
+
+                try { await audio.play(); } catch(e) {}
+
+            } catch (error) {
+                console.error('❌ Error:', error);
+                showToast(`❌ Error: ${error.message}`, 'error', 5000);
+            } finally {
+                state.isGenerating = false;
+                btnGen.disabled = false;
+                btnGen.textContent = '🎤 Generar Canción';
+                estadoEl.style.display = 'none';
+            }
+        }
+
+        // ============================================
+        // DESCARGAR
+        // ============================================
+        function descargar() {
+            if (!state.audioBlob) {
+                showToast('❌ No hay audio para descargar.', 'error');
+                return;
+            }
+            const nombre = state.selected ? state.selected.id : 'canta';
+            const url = URL.createObjectURL(state.audioBlob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `sonaste-canta-${nombre}-${Date.now()}.mp3`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            setTimeout(() => URL.revokeObjectURL(url), 1000);
+            showToast('📥 Descargando...', 'success', 2000);
+        }
+
+        // ============================================
+        // EVENTOS
+        // ============================================
+        document.getElementById('btnCantaGenerar').addEventListener('click', generar);
+        document.getElementById('btnCantaDescargar').addEventListener('click', descargar);
+
+        document.addEventListener('keydown', function(e) {
+            if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+                e.preventDefault();
+                if (state.selected) generar();
+            }
+        });
+
+        // ============================================
+        // INICIALIZACIÓN
+        // ============================================
+        document.addEventListener('DOMContentLoaded', function() {
+            cargarCantantes();
+            document.getElementById('contadorCantaGeneradas').textContent = totalGeneradas;
+            console.log('🎤 SONASTE CANTA cargado');
+            console.log(`🎵 ${CANTANTES.length} estilos disponibles`);
+        });
+    </script>
+</body>
+</html>
+            width: 100%;
+        }
+        .toast {
+            padding: 14px 18px;
+            border-radius: 12px;
+            color: white;
+            font-weight: 600;
+            font-size: 13px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            animation: slideInRight 0.4s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            backdrop-filter: blur(10px);
+            line-height: 1.4;
+        }
+        .toast-success { background: rgba(76, 175, 80, 0.95); }
+        .toast-error { background: rgba(255, 107, 107, 0.95); }
+        .toast-info { background: rgba(108, 60, 225, 0.95); }
+        .toast-warning { background: rgba(255, 193, 7, 0.95); }
+        .toast .toast-close {
+            margin-left: auto;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 18px;
+            cursor: pointer;
+            opacity: 0.7;
+            padding: 0 4px;
+        }
+        .toast .toast-close:hover { opacity: 1; }
+        @keyframes slideInRight {
+            from { opacity: 0; transform: translateX(100px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        /* FOOTER */
+        footer {
+            text-align: center;
+            padding: 30px 20px;
+            background: #0a0a14;
+            color: #666;
+            margin-top: auto;
+            border-top: 2px solid var(--primary);
+            font-size: 14px;
+        }
+        footer span { color: var(--primary); }
+        footer .estadisticas {
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            flex-wrap: wrap;
+            margin-bottom: 10px;
+            font-size: 13px;
+        }
+        footer .estadisticas span {
+            color: var(--primary);
+            font-weight: 700;
+        }
+        footer .footer-legal {
+            font-size: 11px;
+            color: #444;
+            margin-top: 10px;
+            line-height: 1.5;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 600px) {
+            .cantantes-grid {
+                grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+                gap: 10px;
+            }
+            .cantante-card .avatar {
+                width: 55px;
+                height: 55px;
+                font-size: 20px;
+            }
+            .cantante-card .nombre { font-size: 11px; }
+            .canta-botones button { min-width: 100%; }
+            .toast-container { max-width: 90%; right: 5%; }
+        }
+
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #1a1a2e; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--primary-dark); }
+    </style>
+</head>
+<body>
+    <div class="toast-container" id="toastContainer"></div>
+
+    <div class="promo-banner">
+        <span class="gratis">🔥</span> 
+        ¡¡POR AHORA GRATIS!! 🎵 Homenaje a los grandes de la música argentina con IA
+    </div>
+
+    <header class="header-canta">
+        <h1>🎤 ¡SONASTE CANTA! 🎤</h1>
+        <p class="subtitulo">Homenaje a los grandes de la música argentina con inteligencia artificial</p>
+    </header>
+
+    <main class="contenedor">
+
+        <h2 class="seccion-titulo">🎵 Elegí un estilo musical</h2>
+        <p class="seccion-subtitulo">👆 Clic sobre el estilo para seleccionarlo</p>
+
+        <div class="cantantes-grid" id="cantantesGrid"></div>
+
+        <div class="canta-form">
+            <label for="letraCanta">🎵 Escribí tu letra o mensaje:</label>
+            <textarea id="letraCanta" maxlength="500" placeholder="Ej: Argentina, tierra de sol y de esperanza, tu bandera es un pedazo de cielo..."></textarea>
+            <div class="contador"><span id="contadorCanta">0</span> / 500 caracteres</div>
+
+            <div class="consejo">
+                <span class="icono">🔊</span>
+                <div>
+                    <strong>Para una mejor voz:</strong>
+                    <span>Si en tu letra hay un sonido <strong>"LL"</strong>, reemplazalo por <strong>"SH"</strong>.</span>
+                    <div class="ejemplo">📝 Ejemplo: "lluvia" → "shuvia" · "llama" → "shama" · "calle" → "cashe"</div>
+                </div>
+            </div>
+
+            <div class="canta-botones">
+                <button class="btn-canta-generar" id="btnCantaGenerar" disabled>🎤 Generar Canción</button>
+                <button class="btn-canta-descargar" id="btnCantaDescargar" disabled>📥 Descargar</button>
+            </div>
+
+            <div id="estadoCanta" class="estado-cargando" style="display:none;">
+                <span class="spinner"></span> ⏳ Generando canción...
+            </div>
+        </div>
+
+        <div class="canta-resultado" id="cantaResultado">
+            <span class="etiqueta-ia">🤖 Generado con IA</span>
+            <audio id="cantaAudio" controls></audio>
+            <div class="info">
+                ⏱️ Tiempo: <span id="cantaTiempo">0</span>ms | 
+                Tamaño: <span id="cantaTamano">0</span> KB |
+                Estilo: <span id="cantaEstilo">—</span>
+            </div>
+        </div>
+
+        <!-- AVISO LEGAL AL FINAL -->
+        <div class="aviso-legal">
+            <strong>⚠️ AVISO LEGAL IMPORTANTE</strong>
+            Las voces disponibles son <strong>RÉPLICAS DIGITALES GENÉRICAS</strong> creadas con inteligencia artificial. 
+            <strong>NO son las voces reales de los artistas mencionados</strong>, ni cuentan con su aprobación, patrocinio o autorización.
+            <ul>
+                <li>Prohibido presentar el audio como grabación real del artista</li>
+                <li>Prohibido el uso comercial sin autorización</li>
+                <li>Prohibido generar contenido difamatorio u ofensivo</li>
+                <li>Todo audio compartido debe etiquetarse como "Generado con IA - SONASTE CANTA"</li>
+            </ul>
+        </div>
+    </main>
+
+    <footer>
+        <div class="estadisticas">
+            <span>🎵 <span id="contadorCantaGeneradas">0</span> canciones generadas</span>
+            <span>🎤 <span id="contadorCantaEstilos">0</span> estilos disponibles</span>
+        </div>
+        <div>¡SONASTE CANTA! 🎤 <span>© 2026</span> &nbsp;·&nbsp; Homenaje musical con IA</div>
+        <div class="footer-legal">
+            SONASTE CANTA es un proyecto de homenaje artístico y educativo. Las voces son réplicas digitales genéricas creadas con inteligencia artificial y no representan a los artistas reales. No cuenta con la aprobación, patrocinio ni autorización de los artistas, sus herederos o representantes. Prohibido el uso comercial. Todo contenido debe etiquetarse como "Generado con IA".
+        </div>
+    </footer>
+
+    <script>
+        // ============================================
+        // CONFIGURACIÓN
+        // ============================================
+        // ⚠️ IMPORTANTE: Esta URL apunta al backend de SONASTE original.
+        const API_BASE = 'https://sonaste.vercel.app';
+        
+        const MAX_CARACTERES = 500;
+        let totalGeneradas = parseInt(localStorage.getItem('cantaGeneradas') || '0');
+
+        // ============================================
+        // CANTANTES - 12 ESTILOS
+        // ============================================
+        // ⚠️ IMPORTANTE: Los "modelId" son de voces GENÉRICAS de estilo.
+        // NUNCA uses IDs de voces de artistas reales sin consentimiento.
+        // Los que están vacíos "" hay que completarlos cuando consigas los IDs.
+        
+        const CANTANTES = [
+            {
+                id: "tango_estilo_gardel",
+                nombre: "Tango Estilo Gardel",
+                genero: "Tango",
+                avatar: "TG",
+                color: "#D4A017",
+                modelId: "6142dd4d835e43ce9351a81a17ebf6dc"
+            },
+            {
+                id: "folklore_estilo_sosa",
+                nombre: "Folklore Estilo Sosa",
+                genero: "Folklore",
+                avatar: "FS",
+                color: "#4CAF50",
+                modelId: "a65058497fcd47f1ad4d2ce771a92c82"
+            },
+            {
+                id: "rock_estilo_cerati",
+                nombre: "Rock Estilo Cerati",
+                genero: "Rock",
+                avatar: "RC",
+                color: "#2196F3",
+                modelId: "034eb2af538f48488029761bf1ad6a3d"
+            },
+            {
+                id: "rock_estilo_charly",
+                nombre: "Rock Estilo Charly",
+                genero: "Rock",
+                avatar: "RCh",
+                color: "#9C27B0",
+                modelId: "5f1f27a3b98c4ed5b4b6f24d3eb066d4"
+            },
+            {
+                id: "rock_estilo_spinetta",
+                nombre: "Rock Estilo Spinetta",
+                genero: "Rock",
+                avatar: "RS",
+                color: "#607D8B",
+                modelId: "8e73676c62b24d9d90e47dc16848ae97"
+            },
+            {
+                id: "rock_estilo_fito",
+                nombre: "Rock Estilo Fito",
+                genero: "Rock/Pop",
+                avatar: "RF",
+                color: "#FF5722",
+                modelId: "2bb51f6a68444ccd8da9697ac94bb05a"
+            },
+            {
+                id: "rock_estilo_calamaro",
+                nombre: "Rock Estilo Calamaro",
+                genero: "Rock",
+                avatar: "RCa",
+                color: "#795548",
+                modelId: "e6b19834a1d0407b8d90bd1d334ee651"
+            },
+            {
+                id: "folklore_estilo_gieco",
+                nombre: "Folklore Estilo Gieco",
+                genero: "Folklore/Rock",
+                avatar: "FG",
+                color: "#8BC34A",
+                modelId: "197a85a3f3e341eb8e4430411f0dd69d"
+            },
+            {
+                id: "folklore_estilo_heredia",
+                nombre: "Folklore Estilo Heredia",
+                genero: "Folklore",
+                avatar: "FH",
+                color: "#009688",
+                modelId: "d583b30877fd4ac8a2f339b63900afd5"
+            },
+            {
+                id: "rock_pesado_estilo_pappo",
+                nombre: "Rock Pesado Estilo Pappo",
+                genero: "Rock Pesado",
+                avatar: "RP",
+                color: "#F44336",
+                modelId: "d8508b39668241db8274544200c3f142"
             },
             {
                 id: "rock_alternativo_estilo_indio",
