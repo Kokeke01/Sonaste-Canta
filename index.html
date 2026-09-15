@@ -923,35 +923,34 @@
         let sonidoActivado = localStorage.getItem('sonidoActivado') !== 'false';
 
         // ============================================
-        // CANTANTES - 23 ESTILOS
+        // CANTANTES - 24 ESTILOS
         // ============================================
-        const CANTANTES = [
-            { id: "tango_estilo_gardel", nombre: "Tango Estilo Gardel", genero: "Tango", avatar: "TG", color: "#D4A017", modelId: "6142dd4d835e43ce9351a81a17ebf6dc" },
-            { id: "tango_estilo_sosa", nombre: "Tango Estilo Julio Sosa", genero: "Tango", avatar: "JS", color: "#B71C1C", modelId: "b6831efda4284fd7ada0d0ee8b6fc797" },
-            { id: "folklore_estilo_sosa", nombre: "Folklore Estilo Sosa", genero: "Folklore", avatar: "FS", color: "#4CAF50", modelId: "a65058497fcd47f1ad4d2ce771a92c82" },
-            { id: "infantil_estilo_wals", nombre: "Infantil Estilo María Elena Walsh", genero: "Infantil", avatar: "MW", color: "#E91E63", modelId: "31e6d765c0cf4c018b6ef5a695d77da8" },
-            { id: "rock_estilo_cerati", nombre: "Rock Estilo Cerati", genero: "Rock", avatar: "RC", color: "#2196F3", modelId: "034eb2af538f48488029761bf1ad6a3d" },
-            { id: "rock_estilo_charly", nombre: "Rock Estilo Charly", genero: "Rock", avatar: "RCh", color: "#9C27B0", modelId: "5f1f27a3b98c4ed5b4b6f24d3eb066d4" },
-            { id: "rock_estilo_spinetta", nombre: "Rock Estilo Spinetta", genero: "Rock", avatar: "RS", color: "#607D8B", modelId: "8e73676c62b24d9d90e47dc16848ae97" },
-            { id: "rock_estilo_fito", nombre: "Rock Estilo Fito", genero: "Rock/Pop", avatar: "RF", color: "#FF5722", modelId: "2bb51f6a68444ccd8da9697ac94bb05a" },
-            { id: "rock_estilo_calamaro", nombre: "Rock Estilo Calamaro", genero: "Rock", avatar: "RCa", color: "#795548", modelId: "e6b19834a1d0407b8d90bd1d334ee651" },
-            { id: "folklore_estilo_gieco", nombre: "Folklore Estilo Gieco", genero: "Folklore/Rock", avatar: "FG", color: "#8BC34A", modelId: "197a85a3f3e341eb8e4430411f0dd69d" },
-            { id: "folklore_estilo_heredia", nombre: "Folklore Estilo Heredia", genero: "Folklore", avatar: "FH", color: "#009688", modelId: "d583b30877fd4ac8a2f339b63900afd5" },
-            { id: "rock_pesado_estilo_pappo", nombre: "Rock Pesado Estilo Pappo", genero: "Rock Pesado", avatar: "RP", color: "#F44336", modelId: "ca88322266d040758e862838d76859dc" },
-            { id: "rock_alternativo_estilo_indio", nombre: "Rock Alternativo Estilo Indio", genero: "Rock Alternativo", avatar: "RA", color: "#673AB7", modelId: "87cdb13e1cc64ff79aefcbc6eb986500" },
-            { id: "balada_estilo_sandro", nombre: "Balada Estilo Sandro", genero: "Rock/Balada", avatar: "BS", color: "#E91E63", modelId: "82b7eadd15a244a3b74d085ffff3d488" },
-            { id: "rock_estilo_cantilo", nombre: "Rock Estilo Fabiana Cantilo", genero: "Rock", avatar: "FC", color: "#FF4081", modelId: "bedf09a85269477ca6cbf8b3e4ba5e3b" },
-            { id: "folklore_estilo_guarany", nombre: "Folklore Estilo Horacio Guarany", genero: "Folklore", avatar: "HG", color: "#8D6E63", modelId: "6a511228f7c54a6db7ab23363b5d5e1f" },
-            { id: "balada_estilo_iglesias", nombre: "Balada Estilo Julio Iglesias", genero: "Balada", avatar: "JI", color: "#3F51B5", modelId: "21ff519a0d3e49a3b4f74af0da81d30c" },
-            { id: "rock_estilo_sabina", nombre: "Rock Estilo Joaquín Sabina", genero: "Rock/Pop", avatar: "JSa", color: "#FF9800", modelId: "6b6f808587b94df5b4eb3de0f17e7ddd" },
-            { id: "folklore_estilo_serrat", nombre: "Balada Estilo Joan Manuel Serrat", genero: "Folklore/Pop", avatar: "JMS", color: "#009688", modelId: "d0aa16b0d01942a7ad9e290c8e3da30e" },
-            { id: "pop_estilo_pintos", nombre: "Pop Estilo Abel Pintos", genero: "Pop", avatar: "AP", color: "#03A9F4", modelId: "8f3edd833269430885b3687f2de9b4bb" },
-            { id: "pop_estilo_lali", nombre: "Pop Estilo Lali", genero: "Pop", avatar: "LA", color: "#E91E63", modelId: "9e43b03f960647d4a66d8503679bfe8d" },
-            { id: "pop_estilo_becerra", nombre: "Pop Estilo María Becerra", genero: "Pop/Reggaetón", avatar: "MB", color: "#9C27B0", modelId: "ea3008b056894b888ef534c6e9ad4d5c1" },
-            { id: "pop_estilo_tini", nombre: "Pop Estilo Tini", genero: "Pop", avatar: "TI", color: "#FF5722", modelId: "0d73d6a6243447df9350f54e6e519b3d" },
-            { id: "rock_estilo_Vicentico", nombre: "Rock Estilo Vicentico", genero: "Rock", avatar: "VI", color: "E91E63", modelId: "32a37b428c224838abb60c901919414b" }
+                const CANTANTES = [
+            { id: "pop_estilo_pintos", nombre: "Abel Pintos", genero: "Pop", avatar: "AP", color: "#03A9F4", modelId: "8f3edd833269430885b3687f2de9b4bb" },
+            { id: "rock_estilo_calamaro", nombre: "Calamaro", genero: "Rock", avatar: "RCa", color: "#795548", modelId: "e6b19834a1d0407b8d90bd1d334ee651" },
+            { id: "rock_estilo_charly", nombre: "Charly García", genero: "Rock", avatar: "RCh", color: "#9C27B0", modelId: "5f1f27a3b98c4ed5b4b6f24d3eb066d4" },
+            { id: "rock_estilo_cerati", nombre: "Cerati", genero: "Rock", avatar: "RC", color: "#2196F3", modelId: "034eb2af538f48488029761bf1ad6a3d" },
+            { id: "rock_estilo_cantilo", nombre: "Fabiana Cantilo", genero: "Rock", avatar: "FC", color: "#FF4081", modelId: "bedf09a85269477ca6cbf8b3e4ba5e3b" },
+            { id: "rock_estilo_fito", nombre: "Fito Páez", genero: "Rock/Pop", avatar: "RF", color: "#FF5722", modelId: "2bb51f6a68444ccd8da9697ac94bb05a" },
+            { id: "tango_estilo_gardel", nombre: "Gardel", genero: "Tango", avatar: "TG", color: "#D4A017", modelId: "6142dd4d835e43ce9351a81a17ebf6dc" },
+            { id: "folklore_estilo_gieco", nombre: "Gieco", genero: "Folklore/Rock", avatar: "FG", color: "#8BC34A", modelId: "197a85a3f3e341eb8e4430411f0dd69d" },
+            { id: "folklore_estilo_guarany", nombre: "Horacio Guarany", genero: "Folklore", avatar: "HG", color: "#8D6E63", modelId: "6a511228f7c54a6db7ab23363b5d5e1f" },
+            { id: "rock_alternativo_estilo_indio", nombre: "Indio Solari", genero: "Rock Alternativo", avatar: "IS", color: "#673AB7", modelId: "87cdb13e1cc64ff79aefcbc6eb986500" },
+            { id: "folklore_estilo_serrat", nombre: "Joan Manuel Serrat", genero: "Folklore/Pop", avatar: "JMS", color: "#009688", modelId: "d0aa16b0d01942a7ad9e290c8e3da30e" },
+            { id: "rock_estilo_sabina", nombre: "Joaquín Sabina", genero: "Rock/Pop", avatar: "JSa", color: "#FF9800", modelId: "6b6f808587b94df5b4eb3de0f17e7ddd" },
+            { id: "balada_estilo_iglesias", nombre: "Julio Iglesias", genero: "Balada", avatar: "JI", color: "#3F51B5", modelId: "21ff519a0d3e49a3b4f74af0da81d30c" },
+            { id: "tango_estilo_sosa", nombre: "Julio Sosa", genero: "Tango", avatar: "JS", color: "#B71C1C", modelId: "b6831efda4284fd7ada0d0ee8b6fc797" },
+            { id: "pop_estilo_lali", nombre: "Lali", genero: "Pop", avatar: "LA", color: "#E91E63", modelId: "9e43b03f960647d4a66d8503679bfe8d" },
+            { id: "pop_estilo_becerra", nombre: "María Becerra", genero: "Pop/Reggaetón", avatar: "MB", color: "#9C27B0", modelId: "ea3008b056894b888ef534c6e9ad4d5c1" },
+            { id: "infantil_estilo_wals", nombre: "María Elena Walsh", genero: "Infantil", avatar: "MW", color: "#E91E63", modelId: "31e6d765c0cf4c018b6ef5a695d77da8" },
+            { id: "rock_pesado_estilo_pappo", nombre: "Pappo", genero: "Rock Pesado", avatar: "RP", color: "#F44336", modelId: "ca88322266d040758e862838d76859dc" },
+            { id: "balada_estilo_sandro", nombre: "Sandro", genero: "Rock/Balada", avatar: "BS", color: "#E91E63", modelId: "82b7eadd15a244a3b74d085ffff3d488" },
+            { id: "folklore_estilo_heredia", nombre: "Soledad Heredia", genero: "Folklore", avatar: "FH", color: "#009688", modelId: "d583b30877fd4ac8a2f339b63900afd5" },
+            { id: "folklore_estilo_sosa", nombre: "Sosa", genero: "Folklore", avatar: "FS", color: "#4CAF50", modelId: "a65058497fcd47f1ad4d2ce771a92c82" },
+            { id: "rock_estilo_spinetta", nombre: "Spinetta", genero: "Rock", avatar: "RS", color: "#607D8B", modelId: "8e73676c62b24d9d90e47dc16848ae97" },
+            { id: "pop_estilo_tini", nombre: "Tini", genero: "Pop", avatar: "TI", color: "#FF5722", modelId: "0d73d6a6243447df9350f54e6e519b3d" },
+            { id: "rock_estilo_vicentico", nombre: "Vicentico", genero: "Rock", avatar: "VI", color: "#E91E63", modelId: "32a37b428c224838abb60c901919414b" }
         ];
-
         const state = {
             selected: null,
             isGenerating: false,
