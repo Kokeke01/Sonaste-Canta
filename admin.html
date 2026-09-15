@@ -1,578 +1,712 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Panel de Administración - CANTA con los FAMOSOS</title>
+    <meta name="robots" content="noindex, nofollow" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        :root {
+            --primary: #6C3CE1;
+            --primary-dark: #4A1F9E;
+            --gold: #FFD700;
+            --green: #4CAF50;
+            --red: #FF6B6B;
+            --cyan: #4FC3F7;
+            --pink: #FF6B9D;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0f0f1a;
+            margin: 0;
+            min-height: 100vh;
+            color: #e0e0e0;
+        }
 
-<title>Administrar Sonaste</title>
+        /* ===== LOGIN ===== */
+        #loginScreen {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #1A1A2E, #0f0f1a);
+            padding: 20px;
+        }
+        .login-box {
+            background: linear-gradient(135deg, #2a2a3e, #1a1a2e);
+            border: 2px solid var(--primary);
+            border-radius: 16px;
+            padding: 40px 35px;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 0 20px 60px rgba(108, 60, 225, 0.4);
+            text-align: center;
+        }
+        .login-box h1 {
+            color: var(--gold);
+            font-size: 28px;
+            font-weight: 900;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .login-box p {
+            color: #999;
+            font-size: 13px;
+            margin-bottom: 25px;
+        }
+        .login-box input {
+            width: 100%;
+            padding: 14px 16px;
+            border-radius: 10px;
+            border: 2px solid #4a4a5e;
+            background: #1a1a2e;
+            color: #e0e0e0;
+            font-size: 15px;
+            font-family: 'Inter', sans-serif;
+            margin-bottom: 15px;
+            transition: var(--transition);
+        }
+        .login-box input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(108, 60, 225, 0.2);
+        }
+        .login-box button {
+            width: 100%;
+            padding: 14px;
+            border-radius: 10px;
+            border: 0;
+            background: linear-gradient(135deg, #6C3CE1, #4A1F9E);
+            color: white;
+            font-size: 16px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: var(--transition);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .login-box button:hover {
+            transform: scale(1.03);
+            box-shadow: 0 6px 25px rgba(108, 60, 225, 0.6);
+        }
+        .login-error {
+            color: var(--red);
+            font-size: 13px;
+            margin-top: 10px;
+            min-height: 20px;
+            font-weight: 600;
+        }
 
-<style>
+        /* ===== PANEL ===== */
+        #panelScreen { display: none; padding: 20px; }
 
-* {
-    box-sizing: border-box;
-}
+        .admin-header {
+            background: linear-gradient(135deg, #1A1A2E, #0f0f1a);
+            border-bottom: 3px solid var(--primary);
+            padding: 20px;
+            text-align: center;
+            margin: -20px -20px 20px -20px;
+        }
+        .admin-header h1 {
+            color: var(--gold);
+            font-size: clamp(20px, 4vw, 32px);
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .admin-header p {
+            color: #999;
+            font-size: 13px;
+            margin-top: 5px;
+        }
 
-body {
-    margin: 0;
-    background: #f3f3f3;
-    font-family: Arial, sans-serif;
-}
+        .admin-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
 
-header {
-    background: #111;
-    color: white;
-    text-align: center;
-    padding: 20px;
-}
+        /* ===== TARJETAS DE ESTADÍSTICAS ===== */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+        .stat-card {
+            background: linear-gradient(135deg, #2a2a3e, #1a1a2e);
+            border: 2px solid #4a4a5e;
+            border-radius: 14px;
+            padding: 22px;
+            text-align: center;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, #FFD700, #FF6B9D, #4FC3F7, #6C3CE1);
+            background-size: 200% 100%;
+            animation: gradienteTop 3s linear infinite;
+        }
+        @keyframes gradienteTop {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 200% 50%; }
+        }
+        .stat-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-4px);
+            box-shadow: 0 10px 30px rgba(108, 60, 225, 0.3);
+        }
+        .stat-icon {
+            font-size: 36px;
+            margin-bottom: 10px;
+        }
+        .stat-numero {
+            font-size: 32px;
+            font-weight: 900;
+            color: var(--gold);
+            line-height: 1;
+        }
+        .stat-label {
+            font-size: 12px;
+            color: #999;
+            margin-top: 8px;
+            text-transform: uppercase;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
 
-header h1 {
-    margin: 0;
-}
+        /* ===== SECCIONES ===== */
+        .seccion {
+            background: linear-gradient(135deg, #2a2a3e, #1a1a2e);
+            border: 2px solid #4a4a5e;
+            border-radius: 14px;
+            padding: 22px;
+            margin-bottom: 20px;
+        }
+        .seccion-titulo {
+            color: var(--gold);
+            font-size: 18px;
+            font-weight: 800;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .seccion-titulo::before {
+            content: '';
+            width: 4px;
+            height: 22px;
+            background: linear-gradient(180deg, #FFD700, #FF6B9D);
+            border-radius: 2px;
+        }
 
-.contenedor {
-    max-width: 600px;
-    margin: 25px auto;
-    padding: 15px;
-}
+        /* ===== RANKING ===== */
+        .ranking-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            background: rgba(108, 60, 225, 0.1);
+            border-radius: 10px;
+            margin-bottom: 8px;
+            transition: var(--transition);
+        }
+        .ranking-item:hover {
+            background: rgba(108, 60, 225, 0.2);
+        }
+        .ranking-posicion {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            font-size: 14px;
+            background: #2a2a3e;
+            color: #666;
+            flex-shrink: 0;
+        }
+        .ranking-item:nth-child(1) .ranking-posicion { background: linear-gradient(135deg, #FFD700, #FFA000); color: #333; }
+        .ranking-item:nth-child(2) .ranking-posicion { background: linear-gradient(135deg, #C0C0C0, #808080); color: #333; }
+        .ranking-item:nth-child(3) .ranking-posicion { background: linear-gradient(135deg, #CD7F32, #8B4513); color: #fff; }
+        .ranking-nombre {
+            flex: 1;
+            font-weight: 700;
+            color: #e0e0e0;
+        }
+        .ranking-cantidad {
+            font-weight: 900;
+            color: var(--gold);
+            font-size: 16px;
+        }
 
-.panel {
-    background: white;
-    padding: 25px;
-    border-radius: 15px;
-    box-shadow: 0 3px 15px rgba(0,0,0,.1);
-}
+        /* ===== ÚLTIMAS VISITAS ===== */
+        .lista-visitas {
+            max-height: 400px;
+            overflow-y: auto;
+            padding-right: 5px;
+        }
+        .visita-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 12px;
+            background: rgba(79, 195, 247, 0.08);
+            border-left: 3px solid var(--cyan);
+            border-radius: 6px;
+            margin-bottom: 6px;
+            font-size: 13px;
+            gap: 10px;
+        }
+        .visita-fecha {
+            color: #999;
+            font-size: 11px;
+            white-space: nowrap;
+        }
+        .visita-dispositivo {
+            color: var(--cyan);
+            font-weight: 700;
+            font-size: 11px;
+            padding: 3px 8px;
+            background: rgba(79, 195, 247, 0.15);
+            border-radius: 10px;
+        }
 
-input,
-textarea {
-    width: 100%;
-    padding: 14px;
-    margin-top: 8px;
-    margin-bottom: 18px;
-    border: 1px solid #ccc;
-    border-radius: 9px;
-    font-size: 17px;
-}
+        /* ===== GRÁFICO ===== */
+        .grafico-container {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            gap: 8px;
+            height: 180px;
+            padding: 15px 5px 5px 5px;
+            border-bottom: 2px solid #4a4a5e;
+            margin-top: 10px;
+        }
+        .grafico-barra {
+            flex: 1;
+            background: linear-gradient(180deg, #6C3CE1, #4A1F9E);
+            border-radius: 6px 6px 0 0;
+            min-height: 5px;
+            position: relative;
+            transition: var(--transition);
+            cursor: pointer;
+        }
+        .grafico-barra:hover {
+            background: linear-gradient(180deg, #FFD700, #FF6B9D);
+        }
+        .grafico-barra:hover .grafico-tooltip {
+            opacity: 1;
+            transform: translateX(-50%) translateY(-8px);
+        }
+        .grafico-tooltip {
+            position: absolute;
+            top: -30px;
+            left: 50%;
+            transform: translateX(-50%) translateY(0);
+            background: #1a1a2e;
+            border: 1px solid var(--primary);
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--gold);
+            white-space: nowrap;
+            opacity: 0;
+            transition: var(--transition);
+            pointer-events: none;
+        }
+        .grafico-fechas {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 8px;
+            font-size: 10px;
+            color: #666;
+            padding: 0 5px;
+        }
 
-textarea {
-    min-height: 120px;
-}
+        /* ===== ESTADOS ===== */
+        .cargando, .error-msg, .sin-datos {
+            text-align: center;
+            padding: 40px 20px;
+            color: #999;
+        }
+        .cargando {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+        }
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid #2a2a3e;
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        .error-msg { color: var(--red); font-weight: 700; }
+        .sin-datos { font-style: italic; }
 
-button {
-    width: 100%;
-    padding: 16px;
-    border: 0;
-    border-radius: 9px;
-    background: #111;
-    color: white;
-    font-size: 18px;
-    font-weight: bold;
-    cursor: pointer;
-}
+        /* ===== BOTONES ===== */
+        .botones {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+        .btn {
+            padding: 12px 25px;
+            border-radius: 50px;
+            border: 0;
+            font-weight: 800;
+            font-size: 14px;
+            cursor: pointer;
+            transition: var(--transition);
+            font-family: 'Inter', sans-serif;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #6C3CE1, #4A1F9E);
+            color: white;
+        }
+        .btn-danger {
+            background: linear-gradient(135deg, #FF6B6B, #D32F2F);
+            color: white;
+        }
+        .btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 25px rgba(108, 60, 225, 0.5);
+        }
 
-button:disabled {
-    opacity: .5;
-}
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 600px) {
+            .stats-grid { grid-template-columns: 1fr 1fr; }
+            .stat-numero { font-size: 24px; }
+            .stat-icon { font-size: 28px; }
+            .grafico-container { height: 140px; }
+            .login-box { padding: 30px 25px; }
+        }
 
-#foto {
-    width: 100%;
-    margin-top: 10px;
-    border-radius: 10px;
-    display: none;
-}
-
-#mensaje {
-    text-align: center;
-    margin-top: 15px;
-    font-weight: bold;
-}
-
-.oculto {
-    display: none;
-}
-
-.logout {
-    background: #777;
-    margin-top: 12px;
-}
-
-</style>
-
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #1a1a2e; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 4px; }
+    </style>
 </head>
-
 <body>
 
-<header>
-
-<h1>SONASTE</h1>
-
-<p>Panel de administración</p>
-
-</header>
-
-
-<div class="contenedor">
-
-<div class="panel">
-
-
-<!-- LOGIN -->
-
-<div id="login">
-
-<h2>Ingresar</h2>
-
-<label>Email</label>
-
-<input
-type="email"
-id="email"
-placeholder="Tu email"
->
-
-
-<label>Contraseña</label>
-
-<input
-type="password"
-id="password"
-placeholder="Tu contraseña"
->
-
-
-<button onclick="ingresar()">
-
-ENTRAR
-
-</button>
-
-</div>
-
-
-
-<!-- ADMINISTRACIÓN -->
-
-<div id="admin" class="oculto">
-
-<h2>Publicar nueva Sonaste</h2>
-
-
-<label>Frase</label>
-
-<textarea
-id="frase"
-placeholder="Escribí la frase del día..."
-></textarea>
-
-
-<label>Novedad</label>
-
-<textarea
-id="novedad"
-placeholder="Escribí una novedad..."
-></textarea>
-
-
-<label>Foto</label>
-
-<input
-type="file"
-id="archivo"
-accept="image/*"
->
-
-
-<img id="foto">
-
-
-<button
-id="publicar"
-onclick="publicar()"
->
-
-PUBLICAR
-
-</button>
-
-
-<div id="mensaje"></div>
-
-
-<button
-class="logout"
-onclick="salir()"
->
-
-CERRAR SESIÓN
-
-</button>
-
-</div>
-
-</div>
-
-</div>
-
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-<script src="config.js"></script>
-
-
-<script>
-
-const db =
-supabase.createClient(
-    SUPABASE_URL,
-    SUPABASE_KEY
-);
-
-
-// COMPROBAR SESIÓN
-
-async function comprobarSesion(){
-
-    const {
-        data: { session }
-    } =
-    await db.auth.getSession();
-
-
-    if(session){
-
-        document
-        .getElementById("login")
-        .classList.add("oculto");
-
-
-        document
-        .getElementById("admin")
-        .classList.remove("oculto");
-
-
-        cargarActual();
-    }
-}
-
-
-
-// ENTRAR
-
-async function ingresar(){
-
-    const email =
-    document.getElementById("email").value;
-
-
-    const password =
-    document.getElementById("password").value;
-
-
-    const { error } =
-    await db.auth.signInWithPassword({
-
-        email: email,
-
-        password: password
-
-    });
-
-
-    if(error){
-
-        alert(
-            "Email o contraseña incorrectos."
-        );
-
-        return;
-    }
-
-
-    document
-    .getElementById("login")
-    .classList.add("oculto");
-
-
-    document
-    .getElementById("admin")
-    .classList.remove("oculto");
-
-
-    cargarActual();
-}
-
-
-
-// CARGAR PUBLICACIÓN ACTUAL
-
-async function cargarActual(){
-
-    const { data, error } =
-
-    await db
-    .from("sonaste")
-    .select("*")
-    .eq("id",1)
-    .single();
-
-
-    if(error){
-
-        console.error(error);
-
-        return;
-    }
-
-
-    document
-    .getElementById("frase")
-    .value =
-    data.frase || "";
-
-
-    document
-    .getElementById("novedad")
-    .value =
-    data.novedad || "";
-
-
-    if(data.foto_url){
-
-        const imagen =
-        document.getElementById("foto");
-
-
-        imagen.src =
-        data.foto_url;
-
-
-        imagen.style.display =
-        "block";
-    }
-}
-
-
-
-// PREVISUALIZAR FOTO
-
-document
-.getElementById("archivo")
-.addEventListener(
-    "change",
-    function(){
-
-        const archivo =
-        this.files[0];
-
-
-        if(!archivo){
-
-            return;
-        }
-
-
-        const imagen =
-        document.getElementById("foto");
-
-
-        imagen.src =
-        URL.createObjectURL(
-            archivo
-        );
-
-
-        imagen.style.display =
-        "block";
-    }
-);
-
-
-
-// PUBLICAR
-
-async function publicar(){
-
-    const boton =
-    document.getElementById("publicar");
-
-
-    const mensaje =
-    document.getElementById("mensaje");
-
-
-    const frase =
-    document
-    .getElementById("frase")
-    .value
-    .trim();
-
-
-    const novedad =
-    document
-    .getElementById("novedad")
-    .value
-    .trim();
-
-
-    const archivo =
-    document
-    .getElementById("archivo")
-    .files[0];
-
-
-    if(!frase){
-
-        alert(
-            "Escribí una frase."
-        );
-
-        return;
-    }
-
-
-    boton.disabled =
-    true;
-
-
-    mensaje.innerText =
-    "Publicando...";
-
-
-    let fotoUrl =
-    null;
-
-
-
-    // SUBIR FOTO
-
-    if(archivo){
-
-        const extension =
-        archivo.name
-        .split(".")
-        .pop()
-        .toLowerCase();
-
-
-        const nombre =
-        "sonaste-" +
-        Date.now() +
-        "." +
-        extension;
-
-
-        const { error } =
-
-        await db.storage
-        .from("sonaste-fotos")
-        .upload(
-            nombre,
-            archivo,
-            {
-                cacheControl:"3600",
-                upsert:false
+    <!-- ===== PANTALLA DE LOGIN ===== -->
+    <div id="loginScreen">
+        <div class="login-box">
+            <h1>🔐 Admin</h1>
+            <p>CANTA con los FAMOSOS</p>
+            <input type="password" id="passwordInput" placeholder="Contraseña" autocomplete="off" />
+            <button id="loginBtn">ENTRAR</button>
+            <div class="login-error" id="loginError"></div>
+        </div>
+    </div>
+
+    <!-- ===== PANEL DE ADMIN ===== -->
+    <div id="panelScreen">
+        <div class="admin-header">
+            <h1>📊 Panel de Administración</h1>
+            <p>CANTA con los FAMOSOS</p>
+        </div>
+
+        <div class="admin-container">
+            <!-- ESTADÍSTICAS -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">👥</div>
+                    <div class="stat-numero" id="totalVisitas">—</div>
+                    <div class="stat-label">Visitas totales</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">📅</div>
+                    <div class="stat-numero" id="visitasHoy">—</div>
+                    <div class="stat-label">Visitas hoy</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">📱</div>
+                    <div class="stat-numero" id="visitasMovil">—</div>
+                    <div class="stat-label">Desde móvil</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">💻</div>
+                    <div class="stat-numero" id="visitasPC">—</div>
+                    <div class="stat-label">Desde PC</div>
+                </div>
+            </div>
+
+            <!-- GRÁFICO DE VISITAS POR DÍA -->
+            <div class="seccion">
+                <div class="seccion-titulo">📊 Visitas por día (últimos 7 días)</div>
+                <div id="graficoContainer">
+                    <div class="cargando">
+                        <div class="spinner"></div>
+                        <p>Cargando gráfico...</p>
+                    </div>
+                </div>
+                <div class="grafico-fechas" id="graficoFechas"></div>
+            </div>
+
+            <!-- RANKING DE DISPOSITIVOS -->
+            <div class="seccion">
+                <div class="seccion-titulo">🏆 Ranking de dispositivos</div>
+                <div id="rankingContainer">
+                    <div class="cargando">
+                        <div class="spinner"></div>
+                        <p>Cargando ranking...</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ÚLTIMAS VISITAS -->
+            <div class="seccion">
+                <div class="seccion-titulo">📝 Últimas 20 visitas</div>
+                <div class="lista-visitas" id="listaVisitas">
+                    <div class="cargando">
+                        <div class="spinner"></div>
+                        <p>Cargando visitas...</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- BOTONES -->
+            <div class="botones">
+                <button class="btn btn-primary" id="btnRecargar">🔄 Recargar datos</button>
+                <button class="btn btn-danger" id="btnSalir">🚪 Cerrar sesión</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ============================================
+        // CONFIGURACIÓN
+        // ============================================
+        const PASSWORD_ADMIN = 'Espinillo1486';
+        const SUPABASE_URL = 'https://bgsaevidchwyumqqnway.supabase.co';
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJnc2FldmlkY2h3eXVtcXFud2F5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODgzODI0NDIsImV4cCI6MjEwMzk1ODQ0Mn0.Ts_BmVnexIkQSXPLezn7GsmgQZLV23ADDal_-EBYvbQ';
+
+        // ============================================
+        // LOGIN
+        // ============================================
+        const loginScreen = document.getElementById('loginScreen');
+        const panelScreen = document.getElementById('panelScreen');
+        const passwordInput = document.getElementById('passwordInput');
+        const loginBtn = document.getElementById('loginBtn');
+        const loginError = document.getElementById('loginError');
+
+        function verificarSesion() {
+            if (sessionStorage.getItem('adminLoggedIn') === 'true') {
+                mostrarPanel();
             }
-        );
-
-
-        if(error){
-
-            console.error(error);
-
-
-            mensaje.innerText =
-            "Error al subir la foto.";
-
-
-            boton.disabled =
-            false;
-
-
-            return;
         }
 
+        function mostrarPanel() {
+            loginScreen.style.display = 'none';
+            panelScreen.style.display = 'block';
+            cargarDatos();
+        }
 
-        fotoUrl =
+        loginBtn.addEventListener('click', () => {
+            if (passwordInput.value === PASSWORD_ADMIN) {
+                sessionStorage.setItem('adminLoggedIn', 'true');
+                loginError.textContent = '';
+                mostrarPanel();
+            } else {
+                loginError.textContent = '❌ Contraseña incorrecta';
+                passwordInput.value = '';
+                passwordInput.focus();
+            }
+        });
 
-        db.storage
-        .from("sonaste-fotos")
-        .getPublicUrl(
-            nombre
-        )
-        .data
-        .publicUrl;
-    }
+        passwordInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') loginBtn.click();
+        });
 
+        document.getElementById('btnSalir').addEventListener('click', () => {
+            sessionStorage.removeItem('adminLoggedIn');
+            location.reload();
+        });
 
+        // ============================================
+        // CARGAR DATOS DESDE SUPABASE
+        // ============================================
+        async function fetchSupabase(endpoint) {
+            const response = await fetch(`${SUPABASE_URL}/rest/v1/${endpoint}`, {
+                headers: {
+                    'apikey': SUPABASE_KEY,
+                    'Authorization': `Bearer ${SUPABASE_KEY}`
+                }
+            });
+            if (!response.ok) throw new Error(`Error ${response.status}`);
+            return response.json();
+        }
 
-    // ACTUALIZAR SONASTE
+        async function cargarDatos() {
+            try {
+                // Traer todas las visitas
+                const visitas = await fetchSupabase('visitas?select=*&pagina=eq.CantaFamosos&order=visitado_en.desc');
 
-    const cambios = {
+                // Total de visitas
+                const totalVisitas = visitas.length;
 
-        frase: frase,
+                // Visitas de hoy
+                const hoy = new Date().toISOString().split('T')[0];
+                const visitasHoy = visitas.filter(v => v.visitado_en && v.visitado_en.startsWith(hoy)).length;
 
-        novedad: novedad,
+                // Visitas por dispositivo
+                const moviles = visitas.filter(v => v.dispositivo === 'Móvil').length;
+                const pcs = visitas.filter(v => v.dispositivo === 'PC').length;
 
-        fecha:
-        new Date().toISOString()
+                // Actualizar tarjetas
+                document.getElementById('totalVisitas').textContent = totalVisitas;
+                document.getElementById('visitasHoy').textContent = visitasHoy;
+                document.getElementById('visitasMovil').textContent = moviles;
+                document.getElementById('visitasPC').textContent = pcs;
 
-    };
+                // Gráfico de los últimos 7 días
+                renderizarGrafico(visitas);
 
+                // Ranking de dispositivos
+                renderizarRanking([
+                    { nombre: '📱 Móvil', cantidad: moviles },
+                    { nombre: '💻 PC', cantidad: pcs }
+                ]);
 
-    if(fotoUrl){
+                // Últimas 20 visitas
+                renderizarUltimasVisitas(visitas.slice(0, 20));
 
-        cambios.foto_url =
-        fotoUrl;
-    }
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('totalVisitas').textContent = 'Error';
+                document.getElementById('visitasHoy').textContent = 'Error';
+                document.getElementById('visitasMovil').textContent = 'Error';
+                document.getElementById('visitasPC').textContent = 'Error';
+                document.getElementById('graficoContainer').innerHTML = '<div class="error-msg">❌ Error al cargar datos</div>';
+                document.getElementById('rankingContainer').innerHTML = '<div class="error-msg">❌ Error al cargar datos</div>';
+                document.getElementById('listaVisitas').innerHTML = '<div class="error-msg">❌ Error al cargar datos</div>';
+            }
+        }
 
+        // ============================================
+        // GRÁFICO DE VISITAS POR DÍA
+        // ============================================
+        function renderizarGrafico(visitas) {
+            const contenedor = document.getElementById('graficoContainer');
+            const contenedorFechas = document.getElementById('graficoFechas');
 
-    const { error } =
+            // Calcular visitas por día (últimos 7 días)
+            const dias = [];
+            for (let i = 6; i >= 0; i--) {
+                const fecha = new Date();
+                fecha.setDate(fecha.getDate() - i);
+                const fechaStr = fecha.toISOString().split('T')[0];
+                const cantidad = visitas.filter(v => v.visitado_en && v.visitado_en.startsWith(fechaStr)).length;
+                dias.push({
+                    fecha: fecha,
+                    cantidad: cantidad,
+                    label: fecha.toLocaleDateString('es-AR', { day: 'numeric', month: 'numeric' })
+                });
+            }
 
-    await db
-    .from("sonaste")
-    .update(cambios)
-    .eq("id",1);
+            const maxCantidad = Math.max(...dias.map(d => d.cantidad), 1);
 
+            // Renderizar barras
+            contenedor.innerHTML = '<div class="grafico-container">' +
+                dias.map(d => {
+                    const altura = Math.max((d.cantidad / maxCantidad) * 100, 3);
+                    return `<div class="grafico-barra" style="height: ${altura}%">
+                        <div class="grafico-tooltip">${d.cantidad} visitas</div>
+                    </div>`;
+                }).join('') +
+                '</div>';
 
-    if(error){
+            // Renderizar fechas debajo
+            contenedorFechas.innerHTML = dias.map(d => `<span>${d.label}</span>`).join('');
+        }
 
-        console.error(error);
+        // ============================================
+        // RANKING
+        // ============================================
+        function renderizarRanking(items) {
+            const contenedor = document.getElementById('rankingContainer');
+            const itemsOrdenados = items.sort((a, b) => b.cantidad - a.cantidad);
 
+            if (itemsOrdenados.length === 0) {
+                contenedor.innerHTML = '<div class="sin-datos">Sin datos aún</div>';
+                return;
+            }
 
-        mensaje.innerText =
-        "Error al publicar.";
+            contenedor.innerHTML = itemsOrdenados.map((item, i) => `
+                <div class="ranking-item">
+                    <div class="ranking-posicion">${i + 1}</div>
+                    <div class="ranking-nombre">${item.nombre}</div>
+                    <div class="ranking-cantidad">${item.cantidad}</div>
+                </div>
+            `).join('');
+        }
 
-    } else {
+        // ============================================
+        // ÚLTIMAS VISITAS
+        // ============================================
+        function renderizarUltimasVisitas(visitas) {
+            const contenedor = document.getElementById('listaVisitas');
 
-        mensaje.innerText =
-        "¡PUBLICADO CORRECTAMENTE!";
+            if (visitas.length === 0) {
+                contenedor.innerHTML = '<div class="sin-datos">Sin visitas registradas aún</div>';
+                return;
+            }
 
+            contenedor.innerHTML = visitas.map(v => {
+                const fecha = v.visitado_en ? new Date(v.visitado_en) : null;
+                const fechaStr = fecha ? fecha.toLocaleString('es-AR', {
+                    day: '2-digit',
+                    month: '2-digit',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                }) : 'Sin fecha';
 
-        document
-        .getElementById("archivo")
-        .value = "";
-    }
+                return `
+                    <div class="visita-item">
+                        <span class="visita-fecha">${fechaStr}</span>
+                        <span class="visita-dispositivo">${v.dispositivo || 'Desconocido'}</span>
+                    </div>
+                `;
+            }).join('');
+        }
 
+        // ============================================
+        // BOTÓN RECARGAR
+        // ============================================
+        document.getElementById('btnRecargar').addEventListener('click', () => {
+            document.getElementById('graficoContainer').innerHTML = '<div class="cargando"><div class="spinner"></div><p>Cargando...</p></div>';
+            document.getElementById('rankingContainer').innerHTML = '<div class="cargando"><div class="spinner"></div><p>Cargando...</p></div>';
+            document.getElementById('listaVisitas').innerHTML = '<div class="cargando"><div class="spinner"></div><p>Cargando...</p></div>';
+            cargarDatos();
+        });
 
-    boton.disabled =
-    false;
-}
-
-
-
-// CERRAR SESIÓN
-
-async function salir(){
-
-    await db.auth.signOut();
-
-    location.reload();
-}
-
-
-comprobarSesion();
-
-</script>
-
+        // ============================================
+        // INICIALIZACIÓN
+        // ============================================
+        verificarSesion();
+    </script>
 </body>
-
 </html>
