@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>¡SONASTE CANTA! - Homenaje a la música argentina con IA</title>
-    <meta name="description" content="Homenaje a los grandes de la música argentina con IA. Voces genéricas de estilo. Uso educativo y de homenaje." />
-    <meta name="author" content="SONASTE CANTA" />
+    <title>¡CANTA con los FAMOSOS! - Homenaje a la música con IA</title>
+    <meta name="description" content="¡CANTA con los FAMOSOS! Homenaje a los grandes de la música con IA. Voces genéricas de estilo. Uso educativo y de homenaje." />
+    <meta name="author" content="CANTA con los FAMOSOS" />
     <link rel="canonical" href="https://sonaste-canta.vercel.app" />
-    <meta property="og:title" content="¡SONASTE CANTA! - Homenaje a la música argentina con IA" />
-    <meta property="og:description" content="Elegí un estilo musical y escribí tu letra. Voces genéricas con IA." />
+    <meta property="og:title" content="¡CANTA con los FAMOSOS! - Homenaje a la música con IA" />
+    <meta property="og:description" content="Elegí un famoso, escribí tu letra y creá tu canción. Voces genéricas con IA." />
     <meta property="og:url" content="https://sonaste-canta.vercel.app" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="theme-color" content="#6C3CE1">
@@ -789,7 +789,6 @@
         ::-webkit-scrollbar-thumb:hover { background: var(--primary-dark); }
     </style>
 </head>
-
 <body>
     <div id="notas-fondo"></div>
     <button id="btnSonido" aria-label="Activar o silenciar sonidos" title="Activar/Silenciar sonidos">🔊</button>
@@ -797,14 +796,14 @@
 
     <div class="promo-banner">
         <span class="gratis">🔥</span> 
-        ¡¡POR AHORA GRATIS!! 🎵 Homenaje a los grandes de la música argentina con IA
+        ¡¡POR AHORA GRATIS!! 🎵 ¡Cantá con los famosos usando IA!
     </div>
 
     <header class="header-canta">
         <div class="instrumentos">
             <span>🎸</span><span>🎹</span><span>🎺</span><span>🥁</span><span>🎻</span>
         </div>
-        <h1>🎤 ¡SONASTE CANTA! 🎤</h1>
+        <h1>🎤 ¡CANTA con los FAMOSOS! 🎤</h1>
         <p class="subtitulo">
             <span id="textoSubtitulo"></span><span class="subtitulo-cursor"></span>
         </p>
@@ -814,7 +813,7 @@
         <div class="stepper-inner">
             <div class="step activo" id="step1">
                 <div class="step-numero">1</div>
-                <div class="step-texto">Elegí un estilo</div>
+                <div class="step-texto">Elegí un famoso</div>
             </div>
             <div class="step-flecha" id="flecha1">→</div>
             <div class="step" id="step2">
@@ -833,9 +832,9 @@
 
         <section class="paso" id="seccionPaso1">
             <h2 class="paso-titulo">
-                <span class="num">1</span> Elegí un estilo musical
+                <span class="num">1</span> Elegí un famoso
             </h2>
-            <p class="paso-subtitulo">👆 Clic sobre el estilo para seleccionarlo</p>
+            <p class="paso-subtitulo">👆 Clic sobre el famoso para seleccionarlo</p>
             <div class="cantantes-grid" id="cantantesGrid"></div>
         </section>
 
@@ -843,7 +842,7 @@
             <h2 class="paso-titulo">
                 <span class="num">2</span> Escribí tu letra
             </h2>
-            <p class="paso-subtitulo">✍️ Escribí lo que querés que cante el estilo elegido</p>
+            <p class="paso-subtitulo">✍️ Escribí lo que querés que cante el famoso elegido</p>
 
             <div class="canta-form">
                 <label for="letraCanta">🎵 Tu letra o mensaje:</label>
@@ -898,7 +897,7 @@
                 <li>Prohibido presentar el audio como grabación real del artista</li>
                 <li>Prohibido el uso comercial sin autorización</li>
                 <li>Prohibido generar contenido difamatorio u ofensivo</li>
-                <li>Todo audio compartido debe etiquetarse como "Generado con IA - SONASTE CANTA"</li>
+                <li>Todo audio compartido debe etiquetarse como "Generado con IA - CANTA con los FAMOSOS"</li>
             </ul>
         </div>
     </main>
@@ -906,11 +905,11 @@
     <footer>
         <div class="estadisticas">
             <span>🎵 <span id="contadorCantaGeneradas">0</span> canciones generadas</span>
-            <span>🎤 <span id="contadorCantaEstilos">0</span> estilos disponibles</span>
+            <span>🎤 <span id="contadorCantaEstilos">0</span> famosos disponibles</span>
         </div>
-        <div>¡SONASTE CANTA! 🎤 <span>© 2026</span> &nbsp;·&nbsp; Homenaje musical con IA</div>
+        <div>¡CANTA con los FAMOSOS! 🎤 <span>© 2026</span> &nbsp;·&nbsp; Homenaje musical con IA</div>
         <div class="footer-legal">
-            SONASTE CANTA es un proyecto de homenaje artístico y educativo. Las voces son réplicas digitales genéricas creadas con inteligencia artificial y no representan a los artistas reales. No cuenta con la aprobación, patrocinio ni autorización de los artistas, sus herederos o representantes. Prohibido el uso comercial. Todo contenido debe etiquetarse como "Generado con IA".
+            ¡CANTA con los FAMOSOS! es un proyecto de homenaje artístico y educativo. Las voces son réplicas digitales genéricas creadas con inteligencia artificial y no representan a los artistas reales. No cuenta con la aprobación, patrocinio ni autorización de los artistas, sus herederos o representantes. Prohibido el uso comercial. Todo contenido debe etiquetarse como "Generado con IA".
         </div>
     </footer>
     <script>
@@ -923,9 +922,9 @@
         let sonidoActivado = localStorage.getItem('sonidoActivado') !== 'false';
 
         // ============================================
-        // CANTANTES - 26 ESTILOS
+        // FAMOSOS - 26 ESTILOS
         // ============================================
-                const CANTANTES = [
+        const CANTANTES = [
             { id: "pop_estilo_pintos", nombre: "Abel Pintos", genero: "Pop", avatar: "AP", color: "#03A9F4", modelId: "8f3edd833269430885b3687f2de9b4bb" },
             { id: "rock_estilo_calamaro", nombre: "Calamaro", genero: "Rock", avatar: "RCa", color: "#795548", modelId: "e6b19834a1d0407b8d90bd1d334ee651" },
             { id: "rock_estilo_charly", nombre: "Charly García", genero: "Rock", avatar: "RCh", color: "#9C27B0", modelId: "5f1f27a3b98c4ed5b4b6f24d3eb066d4" },
@@ -943,16 +942,17 @@
             { id: "pop_estilo_lali", nombre: "Lali", genero: "Pop", avatar: "LA", color: "#E91E63", modelId: "9e43b03f960647d4a66d8503679bfe8d" },
             { id: "pop_estilo_becerra", nombre: "María Becerra", genero: "Pop/Reggaetón", avatar: "MB", color: "#9C27B0", modelId: "ea3008b056894b888ef534c6e9ad4d5c1" },
             { id: "infantil_estilo_wals", nombre: "María Elena Walsh", genero: "Infantil", avatar: "MW", color: "#E91E63", modelId: "31e6d765c0cf4c018b6ef5a695d77da8" },
+            { id: "folklore_estilo_sosa", nombre: "Mercedes Sosa", genero: "Folklore", avatar: "MS", color: "#4CAF50", modelId: "a65058497fcd47f1ad4d2ce771a92c82" },
             { id: "rock_pesado_estilo_pappo", nombre: "Pappo", genero: "Rock Pesado", avatar: "RP", color: "#F44336", modelId: "ca88322266d040758e862838d76859dc" },
             { id: "cuarteto_estilo_rodrigo", nombre: "Rodrigo", genero: "Cuarteto", avatar: "RO", color: "#E91E63", modelId: "f7a3443ce6cb4cfd81558b195ec43718" },
             { id: "balada_estilo_sandro", nombre: "Sandro", genero: "Rock/Balada", avatar: "BS", color: "#E91E63", modelId: "82b7eadd15a244a3b74d085ffff3d488" },
             { id: "folklore_estilo_soledad", nombre: "Soledad", genero: "Folklore", avatar: "SO", color: "#F44336", modelId: "197f0894208e48e0b83053bb87fb2464" },
-            { id: "folklore_estilo_sosa", nombre: "Mercedes Sosa", genero: "Folklore", avatar: "FS", color: "#4CAF50", modelId: "a65058497fcd47f1ad4d2ce771a92c82" },
             { id: "rock_estilo_spinetta", nombre: "Spinetta", genero: "Rock", avatar: "RS", color: "#607D8B", modelId: "8e73676c62b24d9d90e47dc16848ae97" },
             { id: "pop_estilo_tini", nombre: "Tini", genero: "Pop", avatar: "TI", color: "#FF5722", modelId: "0d73d6a6243447df9350f54e6e519b3d" },
             { id: "folklore_estilo_heredia", nombre: "Victor Heredia", genero: "Folklore", avatar: "VH", color: "#009688", modelId: "d583b30877fd4ac8a2f339b63900afd5" },
             { id: "rock_estilo_vicentico", nombre: "Vicentico", genero: "Rock", avatar: "VI", color: "#E91E63", modelId: "32a37b428c224838abb60c901919414b" }
         ];
+
         const state = {
             selected: null,
             isGenerating: false,
@@ -1020,8 +1020,8 @@
         // ============================================
         function escribirSubtitulo() {
             const textos = [
-                'Homenaje a los grandes de la música argentina con IA',
-                '🎵 Escribí tu letra y elegí un estilo 🎵',
+                'Elegí un famoso, escribí tu letra y creá tu canción',
+                '🎵 Homenaje a los grandes de la música con IA 🎵',
                 '🎤 Creá canciones únicas con IA 🎤'
             ];
             const elemento = document.getElementById('textoSubtitulo');
@@ -1213,7 +1213,7 @@
 
             if (cantante.modelId) {
                 sonidoSeleccion();
-                showToast(`✅ Estilo elegido: ${cantante.nombre}`, 'success', 2000);
+                showToast(`✅ Famoso elegido: ${cantante.nombre}`, 'success', 2000);
                 actualizarStepper(2);
                 setTimeout(() => {
                     document.getElementById('seccionPaso2').scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -1245,7 +1245,7 @@
 
             if (!cantante) {
                 sonidoError();
-                showToast('👆 Primero elegí un estilo.', 'warning');
+                showToast('👆 Primero elegí un famoso.', 'warning');
                 document.getElementById('seccionPaso1').scrollIntoView({ behavior: 'smooth' });
                 return;
             }
@@ -1335,7 +1335,7 @@
             const url = URL.createObjectURL(state.audioBlob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = `sonaste-canta-${nombre}-${Date.now()}.mp3`;
+            a.download = `canta-famosos-${nombre}-${Date.now()}.mp3`;
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
@@ -1366,8 +1366,8 @@
             cargarCantantes();
             actualizarStepper(1);
             document.getElementById('contadorCantaGeneradas').textContent = totalGeneradas;
-            console.log('🎤 SONASTE CANTA cargado');
-            console.log(`🎵 ${CANTANTES.length} estilos disponibles`);
+            console.log('🎤 ¡CANTA con los FAMOSOS! cargado');
+            console.log(`🎵 ${CANTANTES.length} famosos disponibles`);
             console.log(`🔊 Sonidos: ${sonidoActivado ? 'activados' : 'silenciados'}`);
         });
     </script>
