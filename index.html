@@ -1023,7 +1023,7 @@
         // ============================================
         function escribirSubtitulo() {
             const textos = [
-                'Elegí un famoso, escribí tu letra y creá tu canción',
+                'Elegí un famoso, escribí o grabá tu letra y creá tu canción',
                 '🎵 Homenaje a los grandes de la música con IA 🎵',
                 '🎤 Creá canciones únicas con IA 🎤'
             ];
@@ -1254,7 +1254,7 @@
             }
             if (!texto) {
                 sonidoError();
-                showToast('✏️ Primero escribí tu letra.', 'error');
+                showToast('✏️ Primero escribí o grabá tu letra.', 'error');
                 document.getElementById('letraCanta').focus();
                 return;
             }
