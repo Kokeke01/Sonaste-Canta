@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Precios - SONASTE y CANTA con los FAMOSOS</title>
+    <meta name="description" content="Planes y precios de SONASTE y CANTA con los FAMOSOS. Elegí el plan que más te conviene." />
+    <meta name="theme-color" content="#6C3CE1">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        :root {
+            --primary: #6C3CE1;
+            --primary-dark: #4A1F9E;
+            --gold: #FFD700;
+            --green: #4CAF50;
+            --pink: #FF6B9D;
+            --cyan: #4FC3F7;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0f0f1a;
+            color: #e0e0e0;
+            margin: 0;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+        #notas-fondo {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+        .nota-flotante {
+            position: absolute;
+            font-size: 24px;
+            opacity: 0.15;
+            animation: caerNota linear infinite;
+            user-select: none;
+        }
+        @keyframes caerNota {
+            0% { transform: translateY(-100px) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.2; }
+            90% { opacity: 0.2; }
+            100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
+        }
+        .header {
+            background: linear-gradient(135deg, #1A1A2E, #0f0f1a, #1a0a2e);
+            background-size: 200% 200%;
+            animation: fondoGradiente 10s ease infinite;
+            text-align: center;
+            padding: 60px 20px 40px;
+            border-bottom: 4px solid var(--primary);
+            position: relative;
+            z-index: 1;
+        }
+        @keyframes fondoGradiente {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        .header h1 {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 900;
+            text-transform: uppercase;
+            margin: 0;
+            font-style: italic;
+            letter-spacing: 2px;
+            background: linear-gradient(90deg, #FFD700, #FF6B9D, #4FC3F7, #6C3CE1, #FFD700);
+            background-size: 300% 100%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: tituloArcoiris 5s ease infinite;
+        }
+        @keyframes tituloArcoiris {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        .header p {
+            color: #999;
+            font-size: clamp(14px, 1.5vw, 18px);
+            margin-top: 15px;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.6;
+        }
+        .contenedor {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            position: relative;
+            z-index: 1;
+        }
+        .seccion-titulo {
+            text-align: center;
+            color: var(--gold);
+            font-size: clamp(22px, 3vw, 32px);
+            font-weight: 900;
+            margin-bottom: 10px;
+        }
+        .seccion-subtitulo {
+            text-align: center;
+            color: #999;
+            font-size: 15px;
+            margin-bottom: 30px;
+        }
+        .selector-apps {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+        }
+        .app-tab {
+            background: linear-gradient(135deg, #2a2a3e, #1a1a2e);
+            border: 2px solid #4a4a5e;
+            border-radius: 12px;
+            padding: 15px 30px;
+            cursor: pointer;
+            transition: var(--transition);
+            font-weight: 800;
+            font-size: 15px;
+            color: #999;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .app-tab.activo {
+            border-color: var(--primary);
+            color: var(--gold);
+            background: linear-gradient(135deg, #3a2a5e, #1a1a2e);
+            transform: scale(1.05);
+            box-shadow: 0 4px 20px rgba(108, 60, 225, 0.4);
+        }
+        .app-tab:hover:not(.activo) {
+            border-color: var(--primary);
+            color: #e0e0e0;
+        }
+        .app-tab .icono { font-size: 22px; }
+        .contenido-app { display: none; }
+        .contenido-app.activo { display: block; animation: aparecer 0.5s ease; }
+        @keyframes aparecer {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .planes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .plan {
+            background: linear-gradient(135deg, #2a2a3e, #1a1a2e);
+            border: 2px solid #4a4a5e;
+            border-radius: 20px;
+            padding: 30px 25px;
+            position: relative;
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+        }
+        .plan:hover {
+            transform: translateY(-6px);
+            border-color: var(--primary);
+            box-shadow: 0 12px 40px rgba(108, 60, 225, 0.4);
+        }
+        .plan.destacado {
+            border-color: var(--gold);
+            background: linear-gradient(135deg, #3a2a5e, #1a1a2e);
+            box-shadow: 0 0 0 2px var(--gold), 0 12px 40px rgba(255, 215, 0, 0.3);
+        }
+        .plan-badge {
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, #FFD700, #FFA000);
+            color: #333;
+            font-weight: 900;
+            font-size: 11px;
+            padding: 6px 16px;
+            border-radius: 20px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.5);
+        }
+        .plan-nombre {
+            color: var(--gold);
+            font-size: 24px;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+            text-align: center;
+        }
+        .plan-descripcion {
+            color: #999;
+            font-size: 13px;
+            text-align: center;
+            margin-bottom: 20px;
+            min-height: 40px;
+        }
+        .plan-precio {
+            text-align: center;
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #4a4a5e;
+        }
+        .plan-precio .moneda {
+            color: #999;
+            font-size: 14px;
+            vertical-align: top;
+            font-weight: 700;
+        }
+        .plan-precio .monto {
+            font-size: 42px;
+            font-weight: 900;
+            color: #FFD700;
+            line-height: 1;
+        }
+        .plan-precio .periodo {
+            color: #999;
+            font-size: 14px;
+            font-weight: 600;
+        }
+        .plan-precio .precio-ars {
+            color: #ccc;
+            font-size: 12px;
+            margin-top: 5px;
+        }
+        .plan-beneficios {
+            list-style: none;
+            padding: 0;
+            margin-bottom: 25px;
+            flex: 1;
+        }
+        .plan-beneficios li {
+            padding: 8px 0;
+            font-size: 14px;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            color: #ccc;
+            line-height: 1.4;
+        }
+        .plan-beneficios li::before {
+            content: '✓';
+            color: var(--green);
+            font-weight: 900;
+            flex-shrink: 0;
+            font-size: 16px;
+        }
+        .plan-beneficios li.no::before {
+            content: '✗';
+            color: #FF6B6B;
+        }
+        .plan-beneficios li.no {
+            opacity: 0.6;
+        }
+        .plan-beneficios li strong {
+            color: #FFD700;
+            font-weight: 800;
+        }
+        .plan-boton {
+            width: 100%;
+            padding: 16px;
+            border-radius: 50px;
+            border: 0;
+            font-family: 'Inter', sans-serif;
+            font-weight: 900;
+            font-size: 15px;
+            cursor: pointer;
+            transition: var(--transition);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            text-decoration: none;
+            display: block;
+            text-align: center;
+        }
+        .plan-boton.gratis {
+            background: linear-gradient(135deg, #4CAF50, #2E7D32);
+            color: white;
+        }
+        .plan-boton.premium {
+            background: linear-gradient(135deg, #6C3CE1, #4A1F9E);
+            color: white;
+        }
+        .plan-boton.gold {
+            background: linear-gradient(135deg, #FFD700, #FFA000);
+            color: #333;
+        }
+        .plan-boton:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 30px rgba(108, 60, 225, 0.5);
+        }
+        .info-adicional {
+            background: rgba(108, 60, 225, 0.1);
+            border: 2px solid var(--primary);
+            border-radius: 16px;
+            padding: 25px;
+            margin-top: 30px;
+            text-align: center;
+        }
+        .info-adicional h3 {
+            color: var(--gold);
+            font-size: 20px;
+            font-weight: 900;
+            margin-bottom: 15px;
+        }
+        .info-adicional p {
+            color: #ccc;
+            font-size: 14px;
+            line-height: 1.6;
+            max-width: 700px;
+            margin: 0 auto 15px;
+        }
+        .preguntas-frecuentes {
+            margin-top: 50px;
+        }
+        .pregunta {
+            background: linear-gradient(135deg, #2a2a3e, #1a1a2e);
+            border: 1px solid #4a4a5e;
+            border-radius: 12px;
+            padding: 18px 22px;
+            margin-bottom: 12px;
+            transition: var(--transition);
+        }
+        .pregunta:hover {
+            border-color: var(--primary);
+        }
+        .pregunta summary {
+            cursor: pointer;
+            font-weight: 800;
+            color: #FFD700;
+            font-size: 15px;
+            list-style: none;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .pregunta summary::-webkit-details-marker { display: none; }
+        .pregunta summary::after {
+            content: '+';
+            font-size: 24px;
+            color: var(--primary);
+            transition: var(--transition);
+        }
+        .pregunta[open] summary::after {
+            content: '−';
+            transform: rotate(180deg);
+        }
+        .pregunta p {
+            color: #ccc;
+            font-size: 14px;
+            margin-top: 15px;
+            line-height: 1.6;
+        }
+        footer {
+            text-align: center;
+            padding: 40px 20px;
+            background: #0a0a14;
+            color: #666;
+            margin-top: 40px;
+            border-top: 2px solid var(--primary);
+            font-size: 14px;
+            position: relative;
+            z-index: 1;
+        }
+        footer a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        footer a:hover { text-decoration: underline; }
+        .volver {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: linear-gradient(135deg, #2a2a3e, #1a1a2e);
+            color: #e0e0e0;
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 14px;
+            text-decoration: none;
+            border: 2px solid var(--primary);
+            transition: var(--transition);
+            margin-top: 20px;
+        }
+        .volver:hover {
+            background: var(--primary);
+            transform: scale(1.05);
+        }
+        @media (max-width: 600px) {
+            .planes-grid { grid-template-columns: 1fr; }
+            .plan-precio .monto { font-size: 36px; }
+            .header { padding: 40px 15px 30px; }
+        }
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #1a1a2e; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 4px; }
+    </style>
+</head>
+<body>
+    <div id="notas-fondo"></div>
+
+    <header class="header">
+        <h1>💎 Planes y Precios</h1>
+        <p>Elegí el plan que más te conviene. Empezá gratis, mejorá cuando quieras. Sin compromisos, cancelás cuando quieras.</p>
+    </header>
+
+    <main class="contenedor">
+
+        <!-- SELECTOR DE APP -->
+        <div class="selector-apps">
+            <div class="app-tab activo" onclick="cambiarApp('sonaste', this)">
+                <span class="icono">🎙️</span>
+                <span>SONASTE</span>
+            </div>
+            <div class="app-tab" onclick="cambiarApp('canta', this)">
+                <span class="icono">🎵</span>
+                <span>CANTA con los FAMOSOS</span>
+            </div>
+        </div>
+
+        <!-- ============================================ -->
+        <!-- PLANES DE SONASTE -->
+        <!-- ============================================ -->
+        <div id="app-sonaste" class="contenido-app activo">
+            <h2 class="seccion-titulo">🎙️ Planes de SONASTE</h2>
+            <p class="seccion-subtitulo">Clonación de voz con IA</p>
+
+            <div class="planes-grid">
+
+                <!-- PLAN GRATIS -->
+                <div class="plan">
+                    <div class="plan-nombre">Gratis</div>
+                    <div class="plan-descripcion">Para probar y compartir con amigos</div>
+                    <div class="plan-precio">
+                        <span class="moneda">$</span>
+                        <span class="monto">0</span>
+                        <span class="periodo">/mes</span>
+                    </div>
+                    <ul class="plan-beneficios">
+                        <li><strong>5 audios por día</strong></li>
+                        <li>Todos los personajes disponibles</li>
+                        <li>Audios de hasta 15 segundos</li>
+                        <li>Descarga en calidad estándar</li>
+                        <li class="no">Espera de 5 segundos entre audios</li>
+                        <li class="no">Sin audios ilimitados</li>
+                    </ul>
+                    <a href="https://sonaste.vercel.app" class="plan-boton gratis">Empezar gratis</a>
+                </div>
+
+                <!-- PLAN PREMIUM -->
+                <div class="plan destacado">
+                    <div class="plan-badge">⭐ Más popular</div>
+                    <div class="plan-nombre">Premium</div>
+                    <div class="plan-descripcion">Para los que quieren crear sin límites</div>
+                    <div class="plan-precio">
+                        <span class="moneda">$</span>
+                        <span class="monto">2</span>
+                        <span class="periodo">USD/mes</span>
+                        <div class="precio-ars">≈ $2.500 ARS/mes</div>
+                    </div>
+                    <ul class="plan-beneficios">
+                        <li><strong>Audios ilimitados</strong></li>
+                        <li>Todos los personajes + <strong>exclusivos</strong></li>
+                        <li>Audios de hasta <strong>60 segundos</strong></li>
+                        <li>Descarga en <strong>alta calidad</strong></li>
+                        <li>Sin espera entre audios</li>
+                        <li>Sin aviso de IA en el archivo</li>
+                        <li><strong>Prioridad en generación</strong></li>
+                    </ul>
+                    <a href="#" class="plan-boton premium">Suscribirme a Premium</a>
+                </div>
+
+                <!-- PLAN PRO -->
+                <div class="plan">
+                    <div class="plan-nombre">Pro</div>
+                    <div class="plan-descripcion">Para creadores de contenido y profesionales</div>
+                    <div class="plan-precio">
+                        <span class="moneda">$</span>
+                        <span class="monto">5</span>
+                        <span class="periodo">USD/mes</span>
+                        <div class="precio-ars">≈ $6.000 ARS/mes</div>
+                    </div>
+                    <ul class="plan-beneficios">
+                        <li>Todo lo del plan <strong>Premium</strong></li>
+                        <li><strong>API</strong> para usar desde otras apps</li>
+                        <li><strong>Estadísticas</strong> de uso detalladas</li>
+                        <li>Soporte prioritario</li>
+                        <li><strong>Personajes personalizados</strong> (subí tu propia voz)</li>
+                    </ul>
+                    <a href="#" class="plan-boton premium">Suscribirme a Pro</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================ -->
+        <!-- PLANES DE CANTA CON LOS FAMOSOS -->
+        <!-- ============================================ -->
+        <div id="app-canta" class="contenido-app">
+            <h2 class="seccion-titulo">🎵 Planes de CANTA con los FAMOSOS</h2>
+            <p class="seccion-subtitulo">Hacé cantar a tus ídolos con IA</p>
+
+            <div class="planes-grid">
+
+                <!-- PLAN GRATIS -->
+                <div class="plan">
+                    <div class="plan-nombre">Gratis</div>
+                    <div class="plan-descripcion">Para probar y divertirte</div>
+                    <div class="plan-precio">
+                        <span class="moneda">$</span>
+                        <span class="monto">0</span>
+                        <span class="periodo">/mes</span>
+                    </div>
+                    <ul class="plan-beneficios">
+                        <li><strong>10 famosos</strong> disponibles</li>
+                        <li>Crear 1 canción por día</li>
+                        <li>Escuchar online</li>
+                        <li class="no">No podés descargar el MP3</li>
+                        <li class="no">Sin acceso a los 26 famosos</li>
+                    </ul>
+                    <a href="https://sonaste-canta.vercel.app" class="plan-boton gratis">Empezar gratis</a>
+                </div>
+
+                <!-- PLAN PREMIUM -->
+                <div class="plan destacado">
+                    <div class="plan-badge">⭐ Más popular</div>
+                    <div class="plan-nombre">Premium</div>
+                    <div class="plan-descripcion">Para los que quieren compartir sus canciones</div>
+                    <div class="plan-precio">
+                        <span class="moneda">$</span>
+                        <span class="monto">2</span>
+                        <span class="periodo">USD/mes</span>
+                        <div class="precio-ars">≈ $2.500 ARS/mes</div>
+                    </div>
+                    <ul class="plan-beneficios">
+                        <li><strong>Todos los 26 famosos</strong></li>
+                        <li><strong>Canciones ilimitadas</strong></li>
+                        <li><strong>Descarga en MP3</strong></li>
+                        <li>Sin aviso de IA en el archivo</li>
+                        <li>Guardar tus canciones favoritas</li>
+                    </ul>
+                    <a href="#" class="plan-boton premium">Suscribirme a Premium</a>
+                </div>
+
+                <!-- PLAN DELUXE -->
+                <div class="plan">
+                    <div class="plan-nombre">Deluxe</div>
+                    <div class="plan-descripcion">Para escuelas, familias y creadores</div>
+                    <div class="plan-precio">
+                        <span class="moneda">$</span>
+                        <span class="monto">4</span>
+                        <span class="periodo">USD/mes</span>
+                        <div class="precio-ars">≈ $4.800 ARS/mes</div>
+                    </div>
+                    <ul class="plan-beneficios">
+                        <li>Todo lo del plan <strong>Premium</strong></li>
+                        <li><strong>Famosos exclusivos</strong> mes a mes</li>
+                        <li><strong>Hasta 3 personas</strong> por cuenta</li>
+                        <li><strong>Descuento anual</strong> (2 meses gratis)</li>
+                    </ul>
+                    <a href="#" class="plan-boton premium">Suscribirme a Deluxe</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- INFO ADICIONAL -->
+        <div class="info-adicional">
+            <h3>💳 Formas de pago</h3>
+            <p>Aceptamos <strong>Mercado Pago</strong>, <strong>Stripe</strong> y <strong>transferencia bancaria</strong>. Los precios en pesos son aproximados y pueden variar según el tipo de cambio.</p>
+            <p>Si sos de Argentina, podés pagar en pesos con Mercado Pago. Si sos de otro país, podés pagar en dólares con Stripe.</p>
+        </div>
+
+        <!-- PREGUNTAS FRECUENTES -->
+        <div class="preguntas-frecuentes">
+            <h2 class="seccion-titulo">❓ Preguntas frecuentes</h2>
+            <p class="seccion-subtitulo">Todo lo que necesitás saber antes de suscribirte</p>
+
+            <details class="pregunta">
+                <summary>¿Puedo cancelar cuando quiera?</summary>
+                <p>Sí, absolutamente. No hay contratos ni compromisos. Podés cancelar tu suscripción en cualquier momento y seguir usando el plan gratis sin problemas.</p>
+            </details>
+
+            <details class="pregunta">
+                <summary>¿Qué pasa si no me gusta el plan Premium?</summary>
+                <p>Tenés 7 días de garantía. Si no te gusta, te devolvemos el 100% de tu dinero, sin preguntas.</p>
+            </details>
+
+            <details class="pregunta">
+                <summary>¿Los precios pueden cambiar?</summary>
+                <p>Los precios actuales son de lanzamiento. Si en el futuro suben, los usuarios actuales van a mantener el precio original (te avisamos con 30 días de anticipación).</p>
+            </details>
+
+            <details class="pregunta">
+                <summary>¿Puedo usar la API de SONASTE?</summary>
+                <p>Sí, si estás en el plan Pro. La API te permite generar audios desde tus propias apps o proyectos. Es ideal para desarrolladores y creadores de contenido.</p>
+            </details>
+
+            <details class="pregunta">
+                <summary>¿Puedo usar las canciones de CANTA comercialmente?</summary>
+                <p>No, el uso comercial está prohibido. Las canciones son para uso personal, educativo y de homenaje. Si querés usarlas comercialmente, contactanos para un plan especial.</p>
+            </details>
+
+            <details class="pregunta">
+                <summary>¿Los audios tienen algún aviso legal?</summary>
+                <p>Sí. Todos los audios generados son réplicas digitales con IA y no representan a los artistas reales. En el plan Premium podés quitar el aviso del archivo, pero el aviso legal de la web siempre está visible.</p>
+            </details>
+
+            <details class="pregunta">
+                <summary>¿Cómo sé si mi pago se procesó correctamente?</summary>
+                <p>Una vez que pagues, vas a recibir un email de confirmación. También podés ver tu estado de suscripción en tu perfil de usuario.</p>
+            </details>
+
+            <details class="pregunta">
+                <summary>¿Puedo cambiar de plan?</summary>
+                <p>Sí. Podés subir o bajar de plan cuando quieras. Si subís, se te cobra la diferencia. Si bajás, se te acredita el saldo a favor.</p>
+            </details>
+        </div>
+
+        <!-- BOTÓN VOLVER -->
+        <div style="text-align: center; margin-top: 40px;">
+            <a href="https://sonaste.vercel.app" class="volver">← Volver a SONASTE</a>
+            <a href="https://sonaste-canta.vercel.app" class="volver" style="margin-left: 10px;">🎵 Ir a CANTA con los FAMOSOS</a>
+        </div>
+
+    </main>
+
+    <footer>
+        <p>💎 <strong>Precios de lanzamiento</strong> · Válidos hasta nuevo aviso</p>
+        <p style="margin-top: 10px;">
+            <a href="https://sonaste.vercel.app">SONASTE</a> · 
+            <a href="https://sonaste-canta.vercel.app">CANTA con los FAMOSOS</a>
+        </p>
+        <p style="margin-top: 15px; font-size: 12px; color: #444;">
+            © 2026 · Todos los derechos reservados
+        </p>
+    </footer>
+
+    <script>
+        // ============================================
+        // NOTAS FLOTANDO DE FONDO
+        // ============================================
+        function crearNotasFondo() {
+            const contenedor = document.getElementById('notas-fondo');
+            const notas = ['🎵', '🎶', '🎼', '♫', '♪', '🎤', '🎸', '🎹', '🎺', '🥁', '🎻', '💎', '⭐', '✨'];
+            const cantidad = 15;
+            for (let i = 0; i < cantidad; i++) {
+                const nota = document.createElement('div');
+                nota.className = 'nota-flotante';
+                nota.textContent = notas[Math.floor(Math.random() * notas.length)];
+                nota.style.left = Math.random() * 100 + '%';
+                nota.style.animationDuration = (10 + Math.random() * 15) + 's';
+                nota.style.animationDelay = Math.random() * 10 + 's';
+                nota.style.fontSize = (16 + Math.random() * 20) + 'px';
+                nota.style.color = ['#6C3CE1', '#FFD700', '#FF6B9D', '#4FC3F7'][Math.floor(Math.random() * 4)];
+                contenedor.appendChild(nota);
+            }
+        }
+
+        // ============================================
+        // CAMBIAR DE APP (TABS)
+        // ============================================
+        function cambiarApp(app, elemento) {
+            // Desactivar todos los tabs
+            document.querySelectorAll('.app-tab').forEach(t => t.classList.remove('activo'));
+            // Activar el tab clickeado
+            elemento.classList.add('activo');
+
+            // Ocultar todos los contenidos
+            document.querySelectorAll('.contenido-app').forEach(c => c.classList.remove('activo'));
+            // Mostrar el contenido correspondiente
+            document.getElementById('app-' + app).classList.add('activo');
+        }
+
+        // ============================================
+        // INICIALIZACIÓN
+        // ============================================
+        document.addEventListener('DOMContentLoaded', function() {
+            crearNotasFondo();
+            console.log('💎 Página de precios cargada');
+        });
+    </script>
+</body>
+</html>
