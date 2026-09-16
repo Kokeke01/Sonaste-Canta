@@ -4,15 +4,15 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>¡CANTA con los FAMOSOS! - Homenaje a la música con IA</title>
-<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎤</text></svg>">
     <meta name="description" content="¡CANTA con los FAMOSOS! Homenaje a los grandes de la música con IA. Voces genéricas de estilo. Uso educativo y de homenaje." />
     <meta name="author" content="CANTA con los FAMOSOS" />
     <link rel="canonical" href="https://sonaste-canta.vercel.app" />
     <meta property="og:title" content="¡CANTA con los FAMOSOS! - Homenaje a la música con IA" />
-    <meta property="og:description" content="Elegí un famoso, escribí o grabá tu letra y creá tu canción. Voces genéricas con IA." />
+    <meta property="og:description" content="Elegí un famoso, escribí tu letra y creá tu canción. Voces genéricas con IA." />
     <meta property="og:url" content="https://sonaste-canta.vercel.app" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="theme-color" content="#6C3CE1">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎤</text></svg>">
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
@@ -788,6 +788,157 @@
         ::-webkit-scrollbar-track { background: #1a1a2e; border-radius: 4px; }
         ::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 4px; }
         ::-webkit-scrollbar-thumb:hover { background: var(--primary-dark); }
+
+        /* ===== MODAL COMPARTIR ===== */
+        .modal-compartir {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.85);
+            z-index: 2000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            animation: fadeInModal 0.3s ease;
+        }
+        @keyframes fadeInModal {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .modal-contenido {
+            background: linear-gradient(135deg, #1A1A2E, #2a1a4e);
+            border: 2px solid var(--primary);
+            border-radius: 20px;
+            padding: 30px 25px;
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+            position: relative;
+            box-shadow: 0 20px 60px rgba(108,60,225,0.5);
+            animation: slideUpModal 0.4s ease;
+        }
+        @keyframes slideUpModal {
+            from { transform: translateY(30px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        .modal-contenido h2 {
+            color: var(--gold);
+            font-size: 24px;
+            margin-bottom: 10px;
+            font-weight: 900;
+        }
+        .modal-contenido p {
+            color: #ccc;
+            font-size: 14px;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+        .link-box {
+            display: flex;
+            gap: 8px;
+            background: #0f0f1a;
+            border: 2px solid var(--primary);
+            border-radius: 12px;
+            padding: 8px;
+            margin-bottom: 20px;
+        }
+        .link-box input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            color: #4FC3F7;
+            font-weight: 700;
+            font-size: 13px;
+            padding: 8px;
+            outline: none;
+            font-family: 'Inter', sans-serif;
+            min-width: 0;
+        }
+        .link-box button {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 10px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 13px;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+            font-family: 'Inter', sans-serif;
+        }
+        .link-box button:hover {
+            background: var(--primary-dark);
+            transform: scale(1.05);
+        }
+        .modal-botones {
+            display: flex;
+            gap: 10px;
+            flex-direction: column;
+        }
+        .btn-whatsapp {
+            background: #25D366;
+            color: white;
+            border: none;
+            padding: 14px;
+            border-radius: 12px;
+            font-weight: 800;
+            font-size: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Inter', sans-serif;
+        }
+        .btn-whatsapp:hover {
+            background: #128C7E;
+            transform: scale(1.03);
+        }
+        .btn-descargar-final {
+            background: linear-gradient(135deg, #4CAF50, #2E7D32);
+            color: white;
+            border: none;
+            padding: 14px;
+            border-radius: 12px;
+            font-weight: 800;
+            font-size: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Inter', sans-serif;
+        }
+        .btn-descargar-final:hover {
+            transform: scale(1.03);
+            box-shadow: 0 6px 20px rgba(76, 175, 80, 0.6);
+        }
+        .btn-cerrar {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            background: none;
+            border: none;
+            color: #999;
+            font-size: 28px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            line-height: 1;
+            font-family: 'Inter', sans-serif;
+        }
+        .btn-cerrar:hover {
+            color: #fff;
+            transform: scale(1.2) rotate(90deg);
+        }
+        .modal-footer {
+            font-size: 11px !important;
+            color: #666 !important;
+            margin-top: 15px !important;
+            margin-bottom: 0 !important;
+        }
+        @media (max-width: 500px) {
+            .modal-contenido { padding: 25px 20px; }
+            .modal-contenido h2 { font-size: 20px; }
+            .link-box input { font-size: 11px; }
+        }
     </style>
 </head>
 <body>
@@ -819,7 +970,7 @@
             <div class="step-flecha" id="flecha1">→</div>
             <div class="step" id="step2">
                 <div class="step-numero">2</div>
-                <div class="step-texto">Escribí o grabá tu letra</div>
+                <div class="step-texto">Escribí tu letra</div>
             </div>
             <div class="step-flecha" id="flecha2">→</div>
             <div class="step" id="step3">
@@ -841,9 +992,9 @@
 
         <section class="paso" id="seccionPaso2">
             <h2 class="paso-titulo">
-                <span class="num">2</span> Escribí o grabá tu letra
+                <span class="num">2</span> Escribí tu letra
             </h2>
-            <p class="paso-subtitulo">✍️ Escribí o grabá lo que querés que cante el famoso elegido</p>
+            <p class="paso-subtitulo">✍️ Escribí lo que querés que cante el famoso elegido</p>
 
             <div class="canta-form">
                 <label for="letraCanta">🎵 Tu letra o mensaje:</label>
@@ -889,8 +1040,9 @@
                 </div>
             </div>
         </section>
-                <div class="aviso-legal">
-            <strong style="text-align: center; font-style: italic; font-weight: 900;">⚠️ AVISO LEGAL IMPORTANTE</strong>
+
+        <div class="aviso-legal">
+            <strong style="text-align: center; font-style: italic; font-weight: 900; display: block;">⚠️ AVISO LEGAL IMPORTANTE</strong>
             <p style="text-align: center; font-style: italic; font-weight: 700; margin-top: 10px;">
                 Las voces disponibles son
                 <strong style="font-weight: 900;">RÉPLICAS DIGITALES GENÉRICAS</strong>
@@ -904,23 +1056,41 @@
                 <li style="margin-bottom: 6px;">Prohibido generar contenido difamatorio u ofensivo</li>
                 <li>Todo audio compartido debe etiquetarse como "Generado con IA - CANTA con los FAMOSOS"</li>
             </ul>
-        </div>   
+        </div>
+
+        <!-- ===== MODAL PARA COMPARTIR ===== -->
+        <div id="modalCompartir" class="modal-compartir" style="display:none;">
+            <div class="modal-contenido">
+                <button class="btn-cerrar" onclick="cerrarModal()">×</button>
+                <h2>🎉 ¡Tu canción está lista!</h2>
+                <p>📢 Compartila con tus amigos y ayudá a que más gente conozca CANTA con los FAMOSOS:</p>
+                
+                <div class="link-box">
+                    <input type="text" id="linkWeb" value="https://sonaste-canta.vercel.app" readonly>
+                    <button onclick="copiarLink()">📋 Copiar</button>
+                </div>
+                
+                <div class="modal-botones">
+                    <button class="btn-whatsapp" onclick="compartirWhatsApp()">💬 Compartir por WhatsApp</button>
+                    <button class="btn-descargar-final" onclick="descargarFinal()">📥 Descargar audio</button>
+                </div>
+                
+                <p class="modal-footer">⚠️ Voces generadas con IA. No son las voces reales de los artistas.</p>
+            </div>
+        </div>
+
     </main>
-       <footer>
+
+    <footer>
         <div class="estadisticas">
             <span>🎵 <span id="contadorCantaGeneradas">0</span> canciones generadas</span>
             <span>🎤 <span id="contadorCantaEstilos">0</span> famosos disponibles</span>
         </div>
         <div>¡CANTA con los FAMOSOS! 🎤 <span>© 2026</span> &nbsp;·&nbsp; Homenaje musical con IA</div>
-        <div style="margin-top: 12px;">
-            <a href="https://sonaste.vercel.app/precios.html" style="color: #8B6BE8; font-weight: 700; text-decoration: none; padding: 8px 16px; border: 2px solid #8B6BE8; border-radius: 50px; display: inline-block; transition: all 0.3s ease;">
-                💎 Ver planes y precios
-            </a>
-        </div>
         <div class="footer-legal">
             ¡CANTA con los FAMOSOS! es un proyecto de homenaje artístico y educativo. Las voces son réplicas digitales genéricas creadas con inteligencia artificial y no representan a los artistas reales. No cuenta con la aprobación, patrocinio ni autorización de los artistas, sus herederos o representantes. Prohibido el uso comercial. Todo contenido debe etiquetarse como "Generado con IA".
         </div>
-    </footer> 
+    </footer>
     <script>
         // ============================================
         // CONFIGURACIÓN
@@ -935,9 +1105,9 @@
         // ============================================
         const CANTANTES = [
             { id: "pop_estilo_pintos", nombre: "Abel Pintos", genero: "Pop", avatar: "AP", color: "#03A9F4", modelId: "8f3edd833269430885b3687f2de9b4bb" },
-            { id: "rock_estilo_calamaro", nombre: "Calamaro", genero: "Rock", avatar: "RCa", color: "#795548", modelId: "2a96ca691d2e4b7f8a6091604bca2cde" },
-            { id: "rock_estilo_charly", nombre: "Charly García", genero: "Rock", avatar: "RCh", color: "#9C27B0", modelId: "ed83c401c4d3417a856b2b2beaeb57b2" },
-            { id: "rock_estilo_cerati", nombre: "Cerati", genero: "Rock", avatar: "RC", color: "#2196F3", modelId: "9988f9e98e244c9ba17361a6e080ece6" },
+            { id: "rock_estilo_calamaro", nombre: "Calamaro", genero: "Rock", avatar: "RCa", color: "#795548", modelId: "e6b19834a1d0407b8d90bd1d334ee651" },
+            { id: "rock_estilo_charly", nombre: "Charly García", genero: "Rock", avatar: "RCh", color: "#9C27B0", modelId: "3b541c031f4043bc9e31e64490461984" },
+            { id: "rock_estilo_cerati", nombre: "Cerati", genero: "Rock", avatar: "RC", color: "#2196F3", modelId: "034eb2af538f48488029761bf1ad6a3d" },
             { id: "rock_estilo_cantilo", nombre: "Fabiana Cantilo", genero: "Rock", avatar: "FC", color: "#FF4081", modelId: "bedf09a85269477ca6cbf8b3e4ba5e3b" },
             { id: "rock_estilo_fito", nombre: "Fito Páez", genero: "Rock/Pop", avatar: "RF", color: "#FF5722", modelId: "2bb51f6a68444ccd8da9697ac94bb05a" },
             { id: "tango_estilo_gardel", nombre: "Gardel", genero: "Tango", avatar: "TG", color: "#D4A017", modelId: "6142dd4d835e43ce9351a81a17ebf6dc" },
@@ -949,7 +1119,7 @@
             { id: "balada_estilo_iglesias", nombre: "Julio Iglesias", genero: "Balada", avatar: "JI", color: "#3F51B5", modelId: "21ff519a0d3e49a3b4f74af0da81d30c" },
             { id: "tango_estilo_sosa", nombre: "Julio Sosa", genero: "Tango", avatar: "JS", color: "#B71C1C", modelId: "b6831efda4284fd7ada0d0ee8b6fc797" },
             { id: "pop_estilo_lali", nombre: "Lali", genero: "Pop", avatar: "LA", color: "#E91E63", modelId: "9e43b03f960647d4a66d8503679bfe8d" },
-            { id: "pop_estilo_becerra", nombre: "María Becerra", genero: "Pop/Reggaetón", avatar: "MB", color: "#9C27B0", modelId: "ea3008b056894b888ef534c6e9ad4d5c" },
+            { id: "pop_estilo_becerra", nombre: "María Becerra", genero: "Pop/Reggaetón", avatar: "MB", color: "#9C27B0", modelId: "ea3008b056894b888ef534c6e9ad4d5c1" },
             { id: "infantil_estilo_wals", nombre: "María Elena Walsh", genero: "Infantil", avatar: "MW", color: "#E91E63", modelId: "31e6d765c0cf4c018b6ef5a695d77da8" },
             { id: "folklore_estilo_sosa", nombre: "Mercedes Sosa", genero: "Folklore", avatar: "MS", color: "#4CAF50", modelId: "a65058497fcd47f1ad4d2ce771a92c82" },
             { id: "rock_pesado_estilo_pappo", nombre: "Pappo", genero: "Rock Pesado", avatar: "RP", color: "#F44336", modelId: "ca88322266d040758e862838d76859dc" },
@@ -1029,7 +1199,7 @@
         // ============================================
         function escribirSubtitulo() {
             const textos = [
-                'Elegí un famoso, escribí o grabá tu letra y creá tu canción',
+                'Elegí un famoso, escribí tu letra y creá tu canción',
                 '🎵 Homenaje a los grandes de la música con IA 🎵',
                 '🎤 Creá canciones únicas con IA 🎤'
             ];
@@ -1260,7 +1430,7 @@
             }
             if (!texto) {
                 sonidoError();
-                showToast('✏️ Primero escribí o grabá tu letra.', 'error');
+                showToast('✏️ Primero escribí tu letra.', 'error');
                 document.getElementById('letraCanta').focus();
                 return;
             }
@@ -1332,7 +1502,7 @@
         }
 
         // ============================================
-        // DESCARGAR
+        // MODAL COMPARTIR Y DESCARGA
         // ============================================
         function descargar() {
             if (!state.audioBlob) {
@@ -1340,11 +1510,46 @@
                 showToast('❌ No hay audio para descargar.', 'error');
                 return;
             }
+            abrirModal();
+        }
+
+        function abrirModal() {
+            const modal = document.getElementById('modalCompartir');
+            modal.style.display = 'flex';
+            reproducirNota(660, 0.2, 'sine', 0.12);
+        }
+
+        function cerrarModal() {
+            document.getElementById('modalCompartir').style.display = 'none';
+        }
+
+        function copiarLink() {
+            const input = document.getElementById('linkWeb');
+            input.select();
+            input.setSelectionRange(0, 99999);
+            try {
+                document.execCommand('copy');
+                showToast('📋 ¡Link copiado!', 'success', 2000);
+                reproducirNota(880, 0.15, 'sine', 0.1);
+            } catch (err) {
+                showToast('❌ No se pudo copiar', 'error', 2000);
+            }
+        }
+
+        function compartirWhatsApp() {
+            const texto = encodeURIComponent('🎤 ¡Mirá esta app de música con IA! Hacé cantar a Charly, Mercedes Sosa, Pappo y 23 famosos más. Es GRATIS:\n\n');
+            const url = encodeURIComponent('https://sonaste-canta.vercel.app');
+            window.open(`https://wa.me/?text=${texto}${url}`, '_blank');
+            reproducirNota(880, 0.15, 'sine', 0.1);
+        }
+
+        function descargarFinal() {
+            cerrarModal();
             const nombre = state.selected ? state.selected.id : 'canta';
             const url = URL.createObjectURL(state.audioBlob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = `canta-famosos-${nombre}-${Date.now()}.mp3`;
+            a.download = `CantaConLosFamosos-sonaste-canta.vercel.app-${nombre}-${Date.now()}.mp3`;
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
@@ -1352,6 +1557,21 @@
             reproducirNota(660, 0.2, 'sine', 0.12);
             showToast('📥 Descargando...', 'success', 2000);
         }
+
+        // Cerrar modal al hacer clic fuera
+        document.addEventListener('click', function(e) {
+            const modal = document.getElementById('modalCompartir');
+            if (e.target === modal) {
+                cerrarModal();
+            }
+        });
+
+        // Cerrar modal con Escape
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                cerrarModal();
+            }
+        });
 
         // ============================================
         // EVENTOS
@@ -1369,35 +1589,7 @@
         // ============================================
         // INICIALIZACIÓN
         // ============================================
-        // ============================================
-        // REGISTRAR VISITA EN SUPABASE
-        // ============================================
-        const SUPABASE_URL = 'https://bgsaevidchwyumqqnway.supabase.co';
-        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJnc2FldmlkY2h3eXVtcXFud2F5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODgzODI0NDIsImV4cCI6MjEwMzk1ODQ0Mn0.Ts_BmVnexIkQSXPLezn7GsmgQZLV23ADDal_-EBYvbQ';
-
-        async function registrarVisita() {
-            try {
-                await fetch(`${SUPABASE_URL}/rest/v1/visitas`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'apikey': SUPABASE_KEY,
-                        'Authorization': `Bearer ${SUPABASE_KEY}`,
-                        'Prefer': 'return=minimal'
-                    },
-                    body: JSON.stringify({
-                        visitado_en: new Date().toISOString(),
-                        dispositivo: navigator.userAgent.includes('Mobile') ? 'Móvil' : 'PC',
-                        pagina: 'CantaFamosos'
-                    })
-                });
-                console.log('✅ Visita CANTA registrada');
-            } catch (error) {
-                console.log('❌ No se pudo registrar la visita:', error);
-            }
-        }
         document.addEventListener('DOMContentLoaded', function() {
-            registrarVisita();
             crearNotasFondo();
             escribirSubtitulo();
             cargarCantantes();
