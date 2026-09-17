@@ -8,7 +8,7 @@
     <meta name="author" content="CANTA con los FAMOSOS" />
     <link rel="canonical" href="https://sonaste-canta.vercel.app" />
     <meta property="og:title" content="¡CANTA con los FAMOSOS! - Homenaje a la música con IA" />
-    <meta property="og:description" content="Elegí un famoso, escribí tu letra y creá tu canción. Voces genéricas con IA." />
+    <meta property="og:description" content="Elegí un famoso, escribí o grabá tu letra y creá tu canción. Voces genéricas con IA." />
     <meta property="og:url" content="https://sonaste-canta.vercel.app" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="theme-color" content="#6C3CE1">
@@ -970,7 +970,7 @@
             <div class="step-flecha" id="flecha1">→</div>
             <div class="step" id="step2">
                 <div class="step-numero">2</div>
-                <div class="step-texto">Escribí tu letra</div>
+                <div class="step-texto">Escribí o grabá tu letra</div>
             </div>
             <div class="step-flecha" id="flecha2">→</div>
             <div class="step" id="step3">
@@ -992,9 +992,9 @@
 
         <section class="paso" id="seccionPaso2">
             <h2 class="paso-titulo">
-                <span class="num">2</span> Escribí tu letra
+                <span class="num">2</span> Escribí o grabá tu letra
             </h2>
-            <p class="paso-subtitulo">✍️ Escribí lo que querés que cante el famoso elegido</p>
+            <p class="paso-subtitulo">✍️ Escribí o grabá lo que querés que cante el famoso elegido</p>
 
             <div class="canta-form">
                 <label for="letraCanta">🎵 Tu letra o mensaje:</label>
@@ -1199,7 +1199,7 @@
         // ============================================
         function escribirSubtitulo() {
             const textos = [
-                'Elegí un famoso, escribí tu letra y creá tu canción',
+                'Elegí un famoso, escribí o grabá tu letra y creá tu canción',
                 '🎵 Homenaje a los grandes de la música con IA 🎵',
                 '🎤 Creá canciones únicas con IA 🎤'
             ];
@@ -1430,7 +1430,7 @@
             }
             if (!texto) {
                 sonidoError();
-                showToast('✏️ Primero escribí tu letra.', 'error');
+                showToast('✏️ Primero escribí o grabá tu letra.', 'error');
                 document.getElementById('letraCanta').focus();
                 return;
             }
