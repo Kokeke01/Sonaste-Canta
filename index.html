@@ -1676,22 +1676,6 @@
             window.open(`https://wa.me/?text=${texto}${url}`, '_blank');
             reproducirNota(880, 0.15, 'sine', 0.1);
         }
-
-        function descargarFinal() {
-            cerrarModal();
-            const nombre = state.selected ? state.selected.id : 'canta';
-            const url = URL.createObjectURL(state.audioBlob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `CantaConLosFamosos-sonaste-canta.vercel.app-${nombre}-${Date.now()}.mp3`;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            setTimeout(() => URL.revokeObjectURL(url), 1000);
-            reproducirNota(660, 0.2, 'sine', 0.12);
-            showToast('📥 Descargando...', 'success', 2000);
-        }
-
         // Cerrar modal al hacer clic fuera
         document.addEventListener('click', function(e) {
             const modal = document.getElementById('modalCompartir');
