@@ -37,6 +37,7 @@
             color: #e0e0e0;
             overflow-x: hidden;
             position: relative;
+            padding-bottom: 70px;
         }
         #notas-fondo {
             position: fixed;
@@ -1040,10 +1041,19 @@
             .barra-btn-copiar { padding: 6px 12px; font-size: 11px; }
             .barra-texto { display: none; }
             .barra-icono { font-size: 16px; }
+            body { padding-bottom: 60px; }
         }
-        /* Dar espacio al fondo para que la barra no tape contenido */
-        body { padding-bottom: 70px; }
-        @media (max-width: 600px) { body { padding-bottom: 60px; } }
+        /* Fuerza a que la grilla de cantantes se vea siempre */
+        #cantantesGrid {
+            display: grid !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+            min-height: 100px;
+        }
+        .cantante-card {
+            display: block !important;
+            visibility: visible !important;
+        }
     </style>
 </head>
 <body>
@@ -1196,18 +1206,22 @@
             ¡CANTA con los FAMOSOS! es un proyecto de homenaje artístico y educativo. Las voces son réplicas digitales genéricas creadas con inteligencia artificial y no representan a los artistas reales. No cuenta con la aprobación, patrocinio ni autorización de los artistas, sus herederos o representantes. Prohibido el uso comercial. Todo contenido debe etiquetarse como "Generado con IA".
         </div>
     </footer>
+
+    <!-- ===== BARRA STICKY DE DONACIÓN ===== -->
+    <div class="barra-donacion-sticky" id="barraDonacion">
+        <span class="barra-icono">💜</span>
+        <span class="barra-texto">Apoyá CANTA con los FAMOSOS → Alias:</span>
+        <span class="barra-alias">PARRA.PINZA.FUENTE</span>
+        <button class="barra-btn-copiar" onclick="copiarAliasSticky()">📋 Copiar</button>
+        <button class="barra-btn-cerrar" onclick="cerrarBarraDonacion()" title="Cerrar">×</button>
+    </div>
+
     <script>
-        // ============================================
-        // CONFIGURACIÓN
-        // ============================================
-        const API_BASE = 'https://sonaste.vercel.app';
+               const API_BASE = 'https://sonaste.vercel.app';
         const MAX_CARACTERES = 500;
         let totalGeneradas = parseInt(localStorage.getItem('cantaGeneradas') || '0');
         let sonidoActivado = localStorage.getItem('sonidoActivado') !== 'false';
 
-        // ============================================
-        // FAMOSOS - 26 ESTILOS
-        // ============================================
         const CANTANTES = [
             { id: "pop_estilo_pintos", nombre: "Abel Pintos", genero: "Pop", avatar: "AP", color: "#03A9F4", modelId: "8f3edd833269430885b3687f2de9b4bb" },
             { id: "rock_estilo_calamaro", nombre: "Calamaro", genero: "Rock", avatar: "RCa", color: "#795548", modelId: "e6b19834a1d0407b8d90bd1d334ee651" },
@@ -1237,58 +1251,46 @@
             { id: "rock_estilo_vicentico", nombre: "Vicentico", genero: "Rock", avatar: "VI", color: "#E91E63", modelId: "32a37b428c224838abb60c901919414b" }
         ];
 
-        const state = {
-            selected: null,
-            isGenerating: false,
-            audioBlob: null,
-        };
+        const state = { selected: null, isGenerating: false, audioBlob: null };
 
-        // ============================================
-        // 🔢 ACTUALIZAR STEPPER
-        // ============================================
-        function actualizarStepper(pasoActivo) {
-            const step1 = document.getElementById('step1');
-            const step2 = document.getElementById('step2');
-            const step3 = document.getElementById('step3');
-            const flecha1 = document.getElementById('flecha1');
-            const flecha2 = document.getElementById('flecha2');
-
-            [step1, step2, step3].forEach(s => {
-                s.classList.remove('activo', 'completado');
-            });
-            flecha1.classList.remove('activa');
-            flecha2.classList.remove('activa');
-
-            if (pasoActivo >= 1) {
-                step1.classList.add('activo');
-                step1.querySelector('.step-numero').textContent = '1';
-            }
-            if (pasoActivo >= 2) {
-                step1.classList.remove('activo');
-                step1.classList.add('completado');
-                step1.querySelector('.step-numero').textContent = '✓';
-                flecha1.classList.add('activa');
-                step2.classList.add('activo');
-            }
-            if (pasoActivo >= 3) {
-                step2.classList.remove('activo');
-                step2.classList.add('completado');
-                step2.querySelector('.step-numero').textContent = '✓';
-                flecha2.classList.add('activa');
-                step3.classList.add('activo');
-            }
+        function showToast(message, type = 'info', duration = 4000) {
+            const container = document.getElementById('toastContainer');
+            if(!container) return;
+            const toast = document.createElement('div');
+            toast.className = `toast toast-${type}`;
+            const icons = { success: '✅', error: '❌', info: 'ℹ️', warning: '⚠️' };
+            toast.innerHTML = `<span>${icons[type] || 'ℹ️'}</span><span>${message}</span><button class="toast-close" onclick="this.parentElement.remove()">×</button>`;
+            container.appendChild(toast);
+            setTimeout(() => { if (toast.parentElement) toast.remove(); }, duration);
         }
 
-        // ============================================
-        // 🎵 NOTAS FLOTANDO DE FONDO
-        // ============================================
+        let audioContext = null;
+        function initAudioContext() {
+            if (!audioContext) { try { audioContext = new (window.AudioContext || window.webkitAudioContext)(); } catch (e) {} }
+            return audioContext;
+        }
+        function reproducirNota(frecuencia, duracion = 0.2, tipo = 'sine', volumen = 0.15) {
+            if (!sonidoActivado) return;
+            const ctx = initAudioContext(); if (!ctx) return;
+            if (ctx.state === 'suspended') ctx.resume();
+            const oscilador = ctx.createOscillator(); const ganancia = ctx.createGain();
+            oscilador.type = tipo; oscilador.frequency.value = frecuencia;
+            oscilador.connect(ganancia); ganancia.connect(ctx.destination);
+            ganancia.gain.setValueAtTime(0, ctx.currentTime);
+            ganancia.gain.linearRampToValueAtTime(volumen, ctx.currentTime + 0.01);
+            ganancia.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + duracion);
+            oscilador.start(ctx.currentTime); oscilador.stop(ctx.currentTime + duracion);
+        }
+        function sonidoSeleccion() { reproducirNota(880, 0.15, 'sine', 0.12); setTimeout(() => reproducirNota(1108, 0.2, 'sine', 0.1), 80); }
+        function sonidoGenerar() { [523, 659, 784].forEach((nota, i) => { setTimeout(() => reproducirNota(nota, 0.15, 'triangle', 0.1), i * 60); }); }
+        function sonidoExito() { [523, 659, 784, 1046, 1318].forEach((nota, i) => { setTimeout(() => reproducirNota(nota, 0.35, 'sine', 0.12), i * 100); }); }
+        function sonidoError() { reproducirNota(200, 0.3, 'sawtooth', 0.1); setTimeout(() => reproducirNota(150, 0.4, 'sawtooth', 0.1), 150); }
+
         function crearNotasFondo() {
-            const contenedor = document.getElementById('notas-fondo');
+            const contenedor = document.getElementById('notas-fondo'); if(!contenedor) return;
             const notas = ['🎵', '🎶', '🎼', '♫', '♪', '🎤', '🎸', '🎹', '🎺', '🥁', '🎻'];
-            const cantidad = 20;
-            for (let i = 0; i < cantidad; i++) {
-                const nota = document.createElement('div');
-                nota.className = 'nota-flotante';
+            for (let i = 0; i < 20; i++) {
+                const nota = document.createElement('div'); nota.className = 'nota-flotante';
                 nota.textContent = notas[Math.floor(Math.random() * notas.length)];
                 nota.style.left = Math.random() * 100 + '%';
                 nota.style.animationDuration = (8 + Math.random() * 12) + 's';
@@ -1299,153 +1301,43 @@
             }
         }
 
-        // ============================================
-        // ✨ SUBTÍTULO MÁQUINA DE ESCRIBIR
-        // ============================================
         function escribirSubtitulo() {
-            const textos = [
-                'Elegí un famoso, escribí o grabá tu letra y creá tu canción',
-                '🎵 Homenaje a los grandes de la música con IA 🎵',
-                '🎤 Creá canciones únicas con IA 🎤'
-            ];
-            const elemento = document.getElementById('textoSubtitulo');
-            let textoActual = 0;
-            let letraActual = 0;
-            let borrando = false;
-
+            const textos = ['Elegí un famoso, escribí o grabá tu letra y creá tu canción', '🎵 Homenaje a los grandes de la música con IA 🎵', '🎤 Creá canciones únicas con IA 🎤'];
+            const elemento = document.getElementById('textoSubtitulo'); if(!elemento) return;
+            let textoActual = 0, letraActual = 0, borrando = false;
             function ciclo() {
                 const texto = textos[textoActual];
-                if (borrando) {
-                    elemento.textContent = texto.substring(0, letraActual - 1);
-                    letraActual--;
-                } else {
-                    elemento.textContent = texto.substring(0, letraActual + 1);
-                    letraActual++;
-                }
+                if (borrando) { elemento.textContent = texto.substring(0, letraActual - 1); letraActual--; } 
+                else { elemento.textContent = texto.substring(0, letraActual + 1); letraActual++; }
                 let velocidad = borrando ? 30 : 60;
-                if (!borrando && letraActual === texto.length) {
-                    velocidad = 2500;
-                    borrando = true;
-                } else if (borrando && letraActual === 0) {
-                    borrando = false;
-                    textoActual = (textoActual + 1) % textos.length;
-                    velocidad = 500;
-                }
+                if (!borrando && letraActual === texto.length) { velocidad = 2500; borrando = true; } 
+                else if (borrando && letraActual === 0) { borrando = false; textoActual = (textoActual + 1) % textos.length; velocidad = 500; }
                 setTimeout(ciclo, velocidad);
             }
             ciclo();
         }
 
-        // ============================================
-        // 🔊 SISTEMA DE SONIDOS
-        // ============================================
-        let audioContext = null;
-        function initAudioContext() {
-            if (!audioContext) {
-                try {
-                    audioContext = new (window.AudioContext || window.webkitAudioContext)();
-                } catch (e) {
-                    console.log('AudioContext no soportado');
-                }
+        function actualizarStepper(pasoActivo) {
+            const steps = ['step1', 'step2', 'step3'].map(id => document.getElementById(id));
+            const flechas = ['flecha1', 'flecha2'].map(id => document.getElementById(id));
+            steps.forEach(s => { if(s) s.classList.remove('activo', 'completado'); });
+            flechas.forEach(f => { if(f) f.classList.remove('activa'); });
+
+            if (pasoActivo >= 1 && steps[0]) { steps[0].classList.add('activo'); steps[0].querySelector('.step-numero').textContent = '1'; }
+            if (pasoActivo >= 2 && steps[1]) {
+                if(steps[0]) { steps[0].classList.remove('activo'); steps[0].classList.add('completado'); steps[0].querySelector('.step-numero').textContent = '✓'; }
+                if(flechas[0]) flechas[0].classList.add('activa');
+                steps[1].classList.add('activo');
             }
-            return audioContext;
-        }
-        function reproducirNota(frecuencia, duracion = 0.2, tipo = 'sine', volumen = 0.15) {
-            if (!sonidoActivado) return;
-            const ctx = initAudioContext();
-            if (!ctx) return;
-            if (ctx.state === 'suspended') ctx.resume();
-            const oscilador = ctx.createOscillator();
-            const ganancia = ctx.createGain();
-            oscilador.type = tipo;
-            oscilador.frequency.value = frecuencia;
-            oscilador.connect(ganancia);
-            ganancia.connect(ctx.destination);
-            ganancia.gain.setValueAtTime(0, ctx.currentTime);
-            ganancia.gain.linearRampToValueAtTime(volumen, ctx.currentTime + 0.01);
-            ganancia.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + duracion);
-            oscilador.start(ctx.currentTime);
-            oscilador.stop(ctx.currentTime + duracion);
-        }
-        function sonidoSeleccion() {
-            reproducirNota(880, 0.15, 'sine', 0.12);
-            setTimeout(() => reproducirNota(1108, 0.2, 'sine', 0.1), 80);
-        }
-        function sonidoGenerar() {
-            [523, 659, 784].forEach((nota, i) => {
-                setTimeout(() => reproducirNota(nota, 0.15, 'triangle', 0.1), i * 60);
-            });
-        }
-        function sonidoExito() {
-            [523, 659, 784, 1046, 1318].forEach((nota, i) => {
-                setTimeout(() => reproducirNota(nota, 0.35, 'sine', 0.12), i * 100);
-            });
-        }
-        function sonidoError() {
-            reproducirNota(200, 0.3, 'sawtooth', 0.1);
-            setTimeout(() => reproducirNota(150, 0.4, 'sawtooth', 0.1), 150);
-        }
-
-        const btnSonido = document.getElementById('btnSonido');
-        if (!sonidoActivado) {
-            btnSonido.textContent = '🔇';
-            btnSonido.classList.add('silenciado');
-        }
-        btnSonido.addEventListener('click', () => {
-            sonidoActivado = !sonidoActivado;
-            localStorage.setItem('sonidoActivado', sonidoActivado ? 'true' : 'false');
-            btnSonido.textContent = sonidoActivado ? '🔊' : '🔇';
-            btnSonido.classList.toggle('silenciado', !sonidoActivado);
-            if (sonidoActivado) {
-                sonidoSeleccion();
-                showToast('🔊 Sonidos activados', 'success', 1500);
-            } else {
-                showToast('🔇 Sonidos silenciados', 'info', 1500);
-            }
-        });
-
-        // ============================================
-        // TOAST
-        // ============================================
-        function showToast(message, type = 'info', duration = 4000) {
-            const container = document.getElementById('toastContainer');
-            const toast = document.createElement('div');
-            toast.className = `toast toast-${type}`;
-            const icons = { success: '✅', error: '❌', info: 'ℹ️', warning: '⚠️' };
-            toast.innerHTML = `
-                <span>${icons[type] || 'ℹ️'}</span>
-                <span>${message}</span>
-                <button class="toast-close" onclick="this.parentElement.remove()">×</button>
-            `;
-            container.appendChild(toast);
-            setTimeout(() => { if (toast.parentElement) toast.remove(); }, duration);
-        }
-
-        // ============================================
-        // 🎉 CONFETI
-        // ============================================
-        function lanzarConfeti() {
-            const notas = ['🎵', '🎶', '🎼', '🎤', '🎸', '🎹', '🎺', '🥁', '🎻', '✨', '🌟', '⭐'];
-            const cantidad = 40;
-            for (let i = 0; i < cantidad; i++) {
-                setTimeout(() => {
-                    const confeti = document.createElement('div');
-                    confeti.className = 'confeti';
-                    confeti.textContent = notas[Math.floor(Math.random() * notas.length)];
-                    confeti.style.left = Math.random() * 100 + '%';
-                    confeti.style.fontSize = (18 + Math.random() * 20) + 'px';
-                    confeti.style.animationDuration = (2 + Math.random() * 2) + 's';
-                    document.body.appendChild(confeti);
-                    setTimeout(() => confeti.remove(), 4500);
-                }, i * 40);
+            if (pasoActivo >= 3 && steps[2]) {
+                if(steps[1]) { steps[1].classList.remove('activo'); steps[1].classList.add('completado'); steps[1].querySelector('.step-numero').textContent = '✓'; }
+                if(flechas[1]) flechas[1].classList.add('activa');
+                steps[2].classList.add('activo');
             }
         }
 
-        // ============================================
-        // CARGAR GALERÍA
-        // ============================================
         function cargarCantantes() {
-            const contenedor = document.getElementById('cantantesGrid');
+            const contenedor = document.getElementById('cantantesGrid'); if(!contenedor) return;
             contenedor.innerHTML = '';
             CANTANTES.forEach((c, index) => {
                 const card = document.createElement('div');
@@ -1456,25 +1348,16 @@
                 card.style.animationDelay = (index * 0.05) + 's';
                 card.innerHTML = `
                     <span class="badge-legal">GENÉRICA</span>
-                    <div class="avatar" style="background: linear-gradient(135deg, ${c.color}, #1a1a2e);">
-                        ${c.avatar}
-                    </div>
+                    <div class="avatar" style="background: linear-gradient(135deg, ${c.color}, #1a1a2e);">${c.avatar}</div>
                     <div class="nombre">${c.nombre}</div>
                     <div class="genero">${c.genero}</div>
                 `;
-                card.addEventListener('click', (e) => {
-                    crearOndaClick(e, card);
-                    seleccionar(c, card);
-                });
-                card.addEventListener('keydown', (e) => {
-                    if (e.key === 'Enter' || e.key === ' ') {
-                        e.preventDefault();
-                        seleccionar(c, card);
-                    }
-                });
+                card.addEventListener('click', (e) => { crearOndaClick(e, card); seleccionar(c, card); });
+                card.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); seleccionar(c, card); } });
                 contenedor.appendChild(card);
             });
-            document.getElementById('contadorCantaEstilos').textContent = CANTANTES.length;
+            const contador = document.getElementById('contadorCantaEstilos');
+            if(contador) contador.textContent = CANTANTES.length;
         }
 
         function crearOndaClick(evento, elemento) {
@@ -1493,73 +1376,40 @@
             document.querySelectorAll('.cantante-card').forEach(el => el.classList.remove('seleccionado'));
             card.classList.add('seleccionado');
             state.selected = cantante;
-            document.getElementById('btnCantaGenerar').disabled = false;
+            const btnGen = document.getElementById('btnCantaGenerar');
+            if(btnGen) btnGen.disabled = false;
 
-            if (cantante.modelId) {
-                sonidoSeleccion();
-                showToast(`✅ Famoso elegido: ${cantante.nombre}`, 'success', 2000);
-                actualizarStepper(2);
-                setTimeout(() => {
-                    document.getElementById('seccionPaso2').scrollIntoView({ behavior: 'smooth', block: 'start' });
-                }, 500);
-            } else {
-                sonidoError();
-                showToast(`⚠️ ${cantante.nombre} todavía no tiene voz asignada.`, 'warning', 3000);
-            }
-            document.getElementById('letraCanta').focus();
+            sonidoSeleccion();
+            showToast(`✅ Famoso elegido: ${cantante.nombre}`, 'success', 2000);
+            actualizarStepper(2);
+            setTimeout(() => {
+                const sec2 = document.getElementById('seccionPaso2');
+                if(sec2) sec2.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 500);
+            const letra = document.getElementById('letraCanta');
+            if(letra) letra.focus();
         }
 
-        // ============================================
-        // CONTADOR
-        // ============================================
-        document.getElementById('letraCanta').addEventListener('input', function() {
-            const largo = this.value.length;
-            document.getElementById('contadorCanta').textContent = largo;
-            if (largo > 0 && state.selected) {
-                actualizarStepper(3);
-            }
-        });
-
-        // ============================================
-        // GENERAR
-        // ============================================
         async function generar() {
             const cantante = state.selected;
-            const texto = document.getElementById('letraCanta').value.trim();
+            const texto = document.getElementById('letraCanta') ? document.getElementById('letraCanta').value.trim() : '';
 
-            if (!cantante) {
-                sonidoError();
-                showToast('👆 Primero elegí un famoso.', 'warning');
-                document.getElementById('seccionPaso1').scrollIntoView({ behavior: 'smooth' });
-                return;
-            }
-            if (!texto) {
-                sonidoError();
-                showToast('✏️ Primero escribí o grabá tu letra.', 'error');
-                document.getElementById('letraCanta').focus();
-                return;
-            }
-            if (!cantante.modelId) {
-                sonidoError();
-                showToast(`⚠️ ${cantante.nombre} todavía no tiene voz asignada.`, 'warning', 4000);
-                return;
-            }
-            if (state.isGenerating) {
-                showToast('⏳ Ya se está generando.', 'info');
-                return;
-            }
+            if (!cantante) { sonidoError(); showToast('👆 Primero elegí un famoso.', 'warning'); return; }
+            if (!texto) { sonidoError(); showToast('✏️ Primero escribí o grabá tu letra.', 'error'); return; }
+            if (state.isGenerating) { showToast('⏳ Ya se está generando.', 'info'); return; }
 
             const btnGen = document.getElementById('btnCantaGenerar');
             const btnDesc = document.getElementById('btnCantaDescargar');
             const resultado = document.getElementById('cantaResultado');
             const audio = document.getElementById('cantaAudio');
             const estadoEl = document.getElementById('estadoCanta');
+            const letraInput = document.getElementById('letraCanta');
 
             state.isGenerating = true;
-            btnGen.disabled = true;
-            btnGen.textContent = '⏳ Generando...';
-            btnDesc.disabled = true;
-            estadoEl.style.display = 'flex';
+            if(btnGen) { btnGen.disabled = true; btnGen.textContent = '⏳ Generando...'; }
+            if(btnDesc) btnDesc.disabled = true;
+            if(estadoEl) estadoEl.style.display = 'flex';
+            if(letraInput) letraInput.disabled = true;
             sonidoGenerar();
 
             const startTime = Date.now();
@@ -1576,21 +1426,25 @@
                 if (audioBlob.size === 0) throw new Error('El audio está vacío');
 
                 state.audioBlob = audioBlob;
-                audio.src = URL.createObjectURL(audioBlob);
-                resultado.style.display = 'block';
+                if(audio) audio.src = URL.createObjectURL(audioBlob);
+                if(resultado) resultado.style.display = 'block';
 
-                document.getElementById('cantaTiempo').textContent = Date.now() - startTime;
-                document.getElementById('cantaTamano').textContent = (audioBlob.size / 1024).toFixed(1);
-                document.getElementById('cantaEstilo').textContent = cantante.nombre;
+                const t = document.getElementById('cantaTiempo');
+                const tam = document.getElementById('cantaTamano');
+                const est = document.getElementById('cantaEstilo');
+                if(t) t.textContent = Date.now() - startTime;
+                if(tam) tam.textContent = (audioBlob.size / 1024).toFixed(1);
+                if(est) est.textContent = cantante.nombre;
 
-                btnDesc.disabled = false;
+                if(btnDesc) btnDesc.disabled = false;
                 sonidoExito();
                 lanzarConfeti();
                 showToast(`🎉 ¡Canción generada con ${cantante.nombre}!`, 'success', 3000);
 
                 totalGeneradas++;
                 localStorage.setItem('cantaGeneradas', totalGeneradas.toString());
-                document.getElementById('contadorCantaGeneradas').textContent = totalGeneradas;
+                const cg = document.getElementById('contadorCantaGeneradas');
+                if(cg) cg.textContent = totalGeneradas;
 
                 try { await audio.play(); } catch(e) {}
 
@@ -1600,76 +1454,55 @@
                 showToast(`❌ Error: ${error.message}`, 'error', 5000);
             } finally {
                 state.isGenerating = false;
-                btnGen.disabled = false;
-                btnGen.textContent = '🎤 Crear mi canción';
-                estadoEl.style.display = 'none';
+                if(btnGen) { btnGen.disabled = false; btnGen.textContent = '🎤 Crear mi canción'; }
+                if(estadoEl) estadoEl.style.display = 'none';
+                if(letraInput) letraInput.disabled = false;
             }
         }
 
-        // ============================================
-        // MODAL COMPARTIR Y DESCARGA
-        // ============================================
-        function descargar() {
-            if (!state.audioBlob) {
-                sonidoError();
-                showToast('❌ No hay audio para descargar.', 'error');
-                return;
+        function lanzarConfeti() {
+            const notas = ['🎵', '🎶', '🎼', '🎤', '🎸', '🎹', '🎺', '🥁', '🎻', '✨', '🌟', '⭐'];
+            for (let i = 0; i < 40; i++) {
+                setTimeout(() => {
+                    const confeti = document.createElement('div');
+                    confeti.className = 'confeti';
+                    confeti.textContent = notas[Math.floor(Math.random() * notas.length)];
+                    confeti.style.left = Math.random() * 100 + '%';
+                    confeti.style.fontSize = (18 + Math.random() * 20) + 'px';
+                    confeti.style.animationDuration = (2 + Math.random() * 2) + 's';
+                    document.body.appendChild(confeti);
+                    setTimeout(() => confeti.remove(), 4500);
+                }, i * 40);
             }
+        }
+
+        function descargar() {
+            if (!state.audioBlob) { sonidoError(); showToast('❌ No hay audio para descargar.', 'error'); return; }
             abrirModal();
         }
 
         function abrirModal() {
             const modal = document.getElementById('modalCompartir');
-            modal.style.display = 'flex';
+            if(modal) modal.style.display = 'flex';
             reproducirNota(660, 0.2, 'sine', 0.12);
         }
 
         function cerrarModal() {
-            document.getElementById('modalCompartir').style.display = 'none';
+            const modal = document.getElementById('modalCompartir');
+            if(modal) modal.style.display = 'none';
         }
 
         function copiarLink() {
             const input = document.getElementById('linkWeb');
-            input.select();
-            input.setSelectionRange(0, 99999);
+            if(!input) return;
+            input.select(); input.setSelectionRange(0, 99999);
             try {
                 document.execCommand('copy');
                 showToast('📋 ¡Link copiado!', 'success', 2000);
                 reproducirNota(880, 0.15, 'sine', 0.1);
-            } catch (err) {
-                showToast('❌ No se pudo copiar', 'error', 2000);
-            }
-        }
-        function copiarAliasSticky() {
-            const alias = 'PARRA.PINZA.FUENTE';
-            navigator.clipboard.writeText(alias).then(() => {
-                showToast('💜 ¡Alias copiado! Ya podés pegarlo en tu app bancaria.', 'success', 3000);
-                reproducirNota(880, 0.15, 'sine', 0.1);
-            }).catch(() => {
-                // Fallback para navegadores viejos
-                const input = document.createElement('input');
-                input.value = alias;
-                document.body.appendChild(input);
-                input.select();
-                document.execCommand('copy');
-                document.body.removeChild(input);
-                showToast('💜 ¡Alias copiado!', 'success', 3000);
-            });
+            } catch (err) { showToast('❌ No se pudo copiar', 'error', 2000); }
         }
 
-        function cerrarBarraDonacion() {
-            const barra = document.getElementById('barraDonacion');
-            if (barra) {
-                barra.style.transition = 'all 0.4s ease';
-                barra.style.transform = 'translateY(100%)';
-                barra.style.opacity = '0';
-                setTimeout(() => {
-                    barra.style.display = 'none';
-                    document.body.style.paddingBottom = '0';
-                }, 400);
-                sessionStorage.setItem('barraDonacionCerrada', 'true');
-            }
-        }
         async function compartirWhatsApp() {
             if (!state.audioBlob) {
                 sonidoError();
@@ -1703,80 +1536,113 @@
             }
         }
 
-                    const texto = encodeURIComponent(`🎤 ¡Escuchá esta canción que generé con CANTA con los FAMOSOS!\n\n${urlAudio}\n\nGenerá la tuya gratis acá: https://sonaste-canta.vercel.app`);
-                    window.open(`https://wa.me/?text=${texto}`, '_blank');
-                    
-                    reproducirNota(880, 0.15, 'sine', 0.1);
-                    showToast('✅ ¡Canción lista! Enviá el mensaje por WhatsApp.', 'success', 3000);
-                } else {
-                    throw new Error('No se pudo obtener el link del audio');
-                }
+        function descargarFinal() {
+            cerrarModal();
+            if (!state.audioBlob) return;
+            const nombre = state.selected ? state.selected.nombre : 'voz';
+            const url = URL.createObjectURL(state.audioBlob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `CantaConLosFamosos-${nombre}-${Date.now()}.mp3`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            setTimeout(() => URL.revokeObjectURL(url), 1000);
+            showToast(`📥 Descargando canción de ${nombre}...`, 'success', 2000);
+        }
 
-            } catch (error) {
-                console.error('❌ Error al subir a Cloudinary:', error);
-                sonidoError();
-                showToast(`❌ Error al subir el audio. Intentalo de nuevo.`, 'error', 5000);
+        function copiarAliasSticky() {
+            const alias = 'PARRA.PINZA.FUENTE';
+            navigator.clipboard.writeText(alias).then(() => {
+                showToast('💜 ¡Alias copiado! Ya podés pegarlo en tu app bancaria.', 'success', 3000);
+                reproducirNota(880, 0.15, 'sine', 0.1);
+            }).catch(() => {
+                const input = document.createElement('input');
+                input.value = alias;
+                document.body.appendChild(input);
+                input.select();
+                document.execCommand('copy');
+                document.body.removeChild(input);
+                showToast('💜 ¡Alias copiado!', 'success', 3000);
+            });
+        }
+
+        function cerrarBarraDonacion() {
+            const barra = document.getElementById('barraDonacion');
+            if (barra) {
+                barra.style.transition = 'all 0.4s ease';
+                barra.style.transform = 'translateY(100%)';
+                barra.style.opacity = '0';
+                setTimeout(() => {
+                    barra.style.display = 'none';
+                    document.body.style.paddingBottom = '0';
+                }, 400);
+                sessionStorage.setItem('barraDonacionCerrada', 'true');
             }
         }
-        }
-        // Cerrar modal al hacer clic fuera
-        document.addEventListener('click', function(e) {
-            const modal = document.getElementById('modalCompartir');
-            if (e.target === modal) {
-                cerrarModal();
-            }
-        });
 
-        // Cerrar modal con Escape
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') {
-                cerrarModal();
-            }
-        });
-
-        // ============================================
-        // EVENTOS
-        // ============================================
-        document.getElementById('btnCantaGenerar').addEventListener('click', generar);
-        document.getElementById('btnCantaDescargar').addEventListener('click', descargar);
-
-        document.addEventListener('keydown', function(e) {
-            if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
-                e.preventDefault();
-                if (state.selected) generar();
-            }
-        });
-
-        // ============================================
-        // INICIALIZACIÓN
-        // ============================================
         document.addEventListener('DOMContentLoaded', function() {
             crearNotasFondo();
             escribirSubtitulo();
             cargarCantantes();
             actualizarStepper(1);
-            document.getElementById('contadorCantaGeneradas').textContent = totalGeneradas;
-                        // Mostrar la barra sticky solo si no fue cerrada en esta sesión
+            
+            const cg = document.getElementById('contadorCantaGeneradas');
+            if(cg) cg.textContent = totalGeneradas;
+
+            const letra = document.getElementById('letraCanta');
+            if(letra) {
+                letra.addEventListener('input', function() {
+                    const largo = this.value.length;
+                    const cont = document.getElementById('contadorCanta');
+                    if(cont) cont.textContent = largo;
+                    if (largo > 0 && state.selected) { actualizarStepper(3); }
+                });
+            }
+
+            const btnGen = document.getElementById('btnCantaGenerar');
+            if(btnGen) btnGen.addEventListener('click', generar);
+            
+            const btnDesc = document.getElementById('btnCantaDescargar');
+            if(btnDesc) btnDesc.addEventListener('click', descargar);
+
+            const btnSonidoEl = document.getElementById('btnSonido');
+            if(btnSonidoEl) {
+                if (!sonidoActivado) { btnSonidoEl.textContent = '🔇'; btnSonidoEl.classList.add('silenciado'); }
+                btnSonidoEl.addEventListener('click', () => {
+                    sonidoActivado = !sonidoActivado;
+                    localStorage.setItem('sonidoActivado', sonidoActivado ? 'true' : 'false');
+                    btnSonidoEl.textContent = sonidoActivado ? '🔊' : '🔇';
+                    btnSonidoEl.classList.toggle('silenciado', !sonidoActivado);
+                    if (sonidoActivado) { sonidoSeleccion(); showToast('🔊 Sonidos activados', 'success', 1500); } 
+                    else { showToast('🔇 Sonidos silenciados', 'info', 1500); }
+                });
+            }
+
+            document.addEventListener('click', function(e) {
+                const modal = document.getElementById('modalCompartir');
+                if (modal && e.target === modal) { cerrarModal(); }
+            });
+
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') { cerrarModal(); }
+            });
+
+            document.addEventListener('keydown', function(e) {
+                if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+                    e.preventDefault();
+                    if (state.selected) generar();
+                }
+            });
+
             if (sessionStorage.getItem('barraDonacionCerrada') === 'true') {
                 const barra = document.getElementById('barraDonacion');
-                if (barra) {
-                    barra.style.display = 'none';
-                    document.body.style.paddingBottom = '0';
-                }
+                if (barra) { barra.style.display = 'none'; document.body.style.paddingBottom = '0'; }
             }
+            
             console.log('🎤 ¡CANTA con los FAMOSOS! cargado');
             console.log(`🎵 ${CANTANTES.length} famosos disponibles`);
-            console.log(`🔊 Sonidos: ${sonidoActivado ? 'activados' : 'silenciados'}`);
         });
-        </script>
-
-    <!-- ===== BARRA STICKY DE DONACIÓN ===== -->
-    <div class="barra-donacion-sticky" id="barraDonacion">
-        <span class="barra-icono">💜</span>
-        <span class="barra-texto">Apoyá CANTA con los FAMOSOS → Alias:</span>
-        <span class="barra-alias">PARRA.PINZA.FUENTE</span>
-        <button class="barra-btn-copiar" onclick="copiarAliasSticky()">📋 Copiar</button>
-        <button class="barra-btn-cerrar" onclick="cerrarBarraDonacion()" title="Cerrar">×</button>
-    </div>
+    </script>
 </body>
 </html>
